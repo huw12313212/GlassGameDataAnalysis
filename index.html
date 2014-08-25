@@ -1,0 +1,172 @@
+<html>
+<head>
+	<meta charset="utf-8"> <meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<title>GlassGameDataAnalysis</title>
+	<script>
+
+	d3.csv("./data.csv", function(RawData) 
+	{
+	   var GlassType = ["Google","Epson"];
+	   var GlassTypeOffset = 13;
+	   var ConstraintType = ["On-Body","Phone","In-Air"];
+	   var ConstraintTypeOffset = 4;
+
+	   var userNameIndex = 2;
+	   var methodDescriptionIndex = 4;
+	   var intentIndex = 3;
+	   var firstRatingIndex = 7;
+	   var preferSequenceIndex = 16;
+
+	   
+	   //Get Gesture Data Array
+	   var GestureDataArray = [];
+	   for (var i = 0; i < RawData.length; i++) 
+	   {
+	   		var CurrentData = RawData[i];
+
+   			for(var ConstraintCounter = 0; ConstraintCounter<ConstraintType.length;ConstraintCounter++)
+   			{
+   				for (var GlassCounter = 0 ; GlassCounter<GlassType.length;GlassCounter++)
+   				{
+	   				var offset = ConstraintCounter*ConstraintTypeOffset+GlassCounter*GlassTypeOffset;
+		   			var GestureData = {};
+		   			GestureData.GlassType = GlassType[GlassCounter];
+		   			GestureData.ConstraintType = ConstraintType[ConstraintCounter];
+			   		GestureData.name = CurrentData[userNameIndex];
+			   		GestureData.intent = CurrentData[intentIndex];
+			   		GestureData.rating = CurrentData[offset+firstRatingIndex];
+			   		GestureData.method = CurrentData[offset+methodDescriptionIndex];
+			   		GestureData.rawDataIndex = i;
+			   		GestureDataArray.push(GestureData);
+		   		}
+		   	}
+	   };
+
+	   //Get SameOrNot Data
+	   var SameOrNot = 
+	   {
+	   		Same:[],
+	   		Different:[]
+	   };
+
+	   for (var i = 0; i < RawData.length; i++) 
+	   {
+	   		var CurrentData = RawData[i];
+
+   			for(var ConstraintCounter = 0; ConstraintCounter<ConstraintType.length;ConstraintCounter++)
+   			{
+		   		var offset = ConstraintCounter*ConstraintTypeOffset;
+		   		var google = CurrentData[methodDescriptionIndex+offset+GlassTypeOffset*0];
+		   		var epson = CurrentData[methodDescriptionIndex+offset+GlassTypeOffset*1];
+
+		   		var method = {};
+		   		method.rawDataIndex = i;
+		   		method.google = google;
+		   		method.epson = epson;
+
+		   		if(method.google.trim().substring(0, 1)=="同"||method.epson.trim().substring(0, 1)=="同")
+		   		{
+		   			SameOrNot.Same.push(method);
+		   		}
+		   		else if(method.google.trim() == method.epson.trim())
+		   		{
+		   			SameOrNot.Same.push(method);
+		   		}
+		   		else
+		   		{
+		   			SameOrNot.Different.push(method);
+		   		}
+		   	}
+	   };
+
+	   //Get Prefer Sequence
+	   var PreferData = 
+	   {
+	   	"On-Body":[],
+	   	"Phone":[],
+	   	"In-Air":[],
+	   	"All":[]
+	   };
+
+	   for (var i = 0; i < RawData.length; i++) 
+	   {
+	   		var CurrentData = RawData[i];
+
+	   		for (var GlassCounter = 0 ; GlassCounter<GlassType.length;GlassCounter++)
+   			{
+   				var PreferSequence = CurrentData[GlassCounter*GlassTypeOffset+preferSequenceIndex];
+
+   				var ConstraintIndex;
+
+   				if(PreferSequence.substring(0,1)=="I")
+   				{//In-Air
+   					ConstraintIndex=  2 ;
+   				}
+   				else if(PreferSequence.substring(0,1)=="手")
+   				{//Phone
+   					ConstraintIndex = 1;
+   				}
+   				else if(PreferSequence.substring(0,1)=="O")
+   				{//On-Body
+   					ConstraintIndex = 0;
+   				}
+
+				var GestureData = {};
+	   			GestureData.GlassType = GlassType[GlassCounter];
+	   			GestureData.ConstraintType = ConstraintType[ConstraintIndex];
+		   		GestureData.name = CurrentData[userNameIndex];
+		   		GestureData.intent = CurrentData[intentIndex];
+		   		GestureData.rating = CurrentData[offset+firstRatingIndex];
+		   		GestureData.method = CurrentData[offset+methodDescriptionIndex];
+		   		GestureData.rawDataIndex = i;
+
+		   		PreferData[GestureData.ConstraintType].push(GestureData);
+		   		PreferData["All"].push(GestureData);
+   			}
+	   }
+
+	   //IntentRating
+	   var IntentRating = {};
+	   for (var i = 0; i < PreferData["All"].length; i++) {
+
+	   		Data = PreferData["All"][i];
+
+	   		if(IntentRating[Data.intent]==null)
+	   		{
+	   			IntentRating[Data.intent] = {datas:[],ratings:[]};
+	   		}
+
+	   		IntentRating[Data.intent].datas.push(Data);
+	   		IntentRating[Data.intent].ratings.push(parseInt(Data.rating));
+
+	   };
+	   for(var intent in IntentRating)
+	   {
+	   		var sum  = 0;
+			var datas = IntentRating[intent].datas;
+
+			for (var i = 0; i < datas.length; i++) {
+				data = datas[i];
+				sum += parseInt(data.rating);
+			};
+
+			var average = sum/datas.length;
+			IntentRating[intent].average = average;
+	   }
+
+		var Result = {};
+		Result.SameOrNot = SameOrNot;
+		Result.GestureDataArray = GestureDataArray;
+		Result.RawData = RawData;
+		Result.PreferData = PreferData;
+		Result.IntentRating = IntentRating;
+		console.log(Result);
+	});
+
+	</script>
+</head>
+<body>
+</body>
+</html>
