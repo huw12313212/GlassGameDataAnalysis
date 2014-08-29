@@ -1,5 +1,7 @@
 import controlP5.*;
 import processing.video.*;
+import java.awt.*;
+
 ControlP5 controlP5;
 
 Textlabel nameLabel;
@@ -22,20 +24,25 @@ PrintWriter printWriter = null;
 CheckBox checkBox;
 PFont font;
 
+JFrame frame;
+TextField textField = new TextField("type here", 20);
+
+
 void setup() {
 	size(1280, 768);
 	controlP5 = new ControlP5(this);
 	videosName = new ArrayList<String>();
 	tagSet = new ArrayList<String>();
+	
 	//selectInput("Select the first video: ", "fileSelected");
 	nameLabel = new Textlabel(controlP5, "Reviewer Name: ",80, 10, 100, 25);
 	nameLabel.setFont(createFont("Georgia",16));
 	pathLabel = new Textlabel(controlP5, "Video Folder: ", 80, 35, 100, 25);
 	pathLabel.setFont(createFont("Georgia",16));
-	tagLabel = new Textlabel(controlP5, "New Tag: ", 900, 35, 80, 25);
+	tagLabel = new Textlabel(controlP5, "New Tag: ", 450, 5, 80, 25);
 	tagLabel.setFont(createFont("Georgia", 16));
 
-
+	
 	font = createFont("蘋果儷中黑", 12);
 	//textFont(font);
 	ControlFont controlFont = new ControlFont(font, 12);
@@ -77,13 +84,13 @@ void setup() {
     		 .setPosition(705, 80)
     		 .setSize(50, 30);
     controlP5.addButton("add")
-    		 .setPosition(1160, 35)
+    		 .setPosition(760, 5)
     		 .setSize(60,30);
-    controlP5.addTextfield("newTag")
-             .setPosition(1000, 35)
-             .setSize(150,25)
-             .setFont(font)
-             .setColor(color(255, 255, 0));
+    // controlP5.addTextfield("newTag")
+    //          .setPosition(1000, 35)
+    //          .setSize(150,25)
+    //          .setColor(color(255, 255, 0));
+    add(textField);
     checkBox = controlP5.addCheckBox("tag")
     					.setPosition(900, 80)
     					.setColorForeground(color(255, 255, 0))
@@ -215,11 +222,11 @@ public void done(){
 }
 
 public void add(){
-	String addTag = controlP5.get(Textfield.class, "newTag").getText();
+	String addTag = textField.getText();
 	if(!addTag.equals("")){
 		tagSet.add(addTag);
 		checkBox.addItem(addTag, tagSet.size() - 1);
-		ControlP5.get(Textfield.class, "newTag").setText("");
+		textField.setText("");
 	}
 }
 
@@ -256,11 +263,15 @@ public void videoDisplay(String filePath){
 void keyPressed(){
 	if(key == ' '){
 		if(isPlaying){
-			movie.pause();
-			isPlaying = false;
+			if(movie != null){
+				movie.pause();
+				isPlaying = false;
+			}
 		}else{
-			movie.play();
-			isPlaying = true;
+			if(movie != null){
+				movie.play();
+				isPlaying = true;
+			}	
 		}
 	}
 }
@@ -268,3 +279,4 @@ void keyPressed(){
 void movieEvent(Movie m) {
   m.read();
 }
+
