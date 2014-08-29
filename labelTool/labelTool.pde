@@ -7,6 +7,7 @@ ControlP5 controlP5;
 Textlabel nameLabel;
 Textlabel pathLabel;
 Textlabel tagLabel;
+Textlabel videoLabel;
 Textarea pathTextarea;
 ListBox listBox;
 //Textfield nameTextfield;
@@ -24,7 +25,6 @@ PrintWriter printWriter = null;
 CheckBox checkBox;
 PFont font;
 
-JFrame frame;
 TextField textField = new TextField("type here", 20);
 
 
@@ -41,6 +41,8 @@ void setup() {
 	pathLabel.setFont(createFont("Georgia",16));
 	tagLabel = new Textlabel(controlP5, "New Tag: ", 450, 5, 80, 25);
 	tagLabel.setFont(createFont("Georgia", 16));
+	videoLabel = new Textlabel(controlP5, "", 80, 600, 150, 25);
+	videoLabel.setFont(createFont("Georgia", 16));
 
 	
 	font = createFont("蘋果儷中黑", 12);
@@ -114,6 +116,7 @@ void draw() {
 	nameLabel.draw(this);
 	pathLabel.draw(this);
 	tagLabel.draw(this);
+	videoLabel.draw(this);
 	if(movie != null){
 		image(movie, 40, 110, 800, 450);
 	}
@@ -173,6 +176,7 @@ public void next(){
 		}
 		checkBox.deactivateAll();
 		videoDisplay(folderPath + '/' + videosName.get(movieIndex));
+		videoLabel.setText(videosName.get(movieIndex));
 		movieIndex++;
 	}
 	
