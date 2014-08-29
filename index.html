@@ -13,9 +13,12 @@
 	   var ConstraintType = ["On-Body","Phone","In-Air"];
 	   var ConstraintTypeOffset = 4;
 
+       var dateIndex = 1;
 	   var userNameIndex = 2;
 	   var methodDescriptionIndex = 4;
 	   var intentIndex = 3;
+	   var videoIndex = 5;
+	   var whyIndex = 6;
 	   var firstRatingIndex = 7;
 	   var preferSequenceIndex = 16;
 
@@ -31,18 +34,61 @@
    				for (var GlassCounter = 0 ; GlassCounter<GlassType.length;GlassCounter++)
    				{
 	   				var offset = ConstraintCounter*ConstraintTypeOffset+GlassCounter*GlassTypeOffset;
+
 		   			var GestureData = {};
 		   			GestureData.GlassType = GlassType[GlassCounter];
 		   			GestureData.ConstraintType = ConstraintType[ConstraintCounter];
 			   		GestureData.name = CurrentData[userNameIndex];
 			   		GestureData.intent = CurrentData[intentIndex];
 			   		GestureData.rating = CurrentData[offset+firstRatingIndex];
+			   		GestureData.why = CurrentData[offset+whyIndex];
+			   		GestureData.video = CurrentData[offset+videoIndex];
 			   		GestureData.method = CurrentData[offset+methodDescriptionIndex];
+			   		GestureData.date = CurrentData[dateIndex];
 			   		GestureData.rawDataIndex = i;
+
+					var shiftValue;
+			   		if(GlassCounter==0)
+			   			shiftValue = GlassTypeOffset;
+			   		else
+			   			shiftValue = -GlassTypeOffset;
+
+			   		if(GestureData.why.trim().substring(0, 1)=="同")
+			   		{
+			   			GestureData.why = "(同)"+CurrentData[offset+whyIndex+shiftValue];
+			   		}
+
+			   		if(GestureData.video.trim().substring(0, 1)=="同")
+			   		{
+			   			GestureData.video = CurrentData[offset+videoIndex+shiftValue];
+			   		}
+
+			   		if(GestureData.method.trim().substring(0, 1)=="同")
+			   		{
+			   			GestureData.method = "(同)"+CurrentData[offset+methodDescriptionIndex+shiftValue];
+			   		}
+
 			   		GestureDataArray.push(GestureData);
 		   		}
 		   	}
 	   };
+
+
+
+
+
+	   var DivideByName = {};
+	   for(var index in GestureDataArray)
+	   {
+	   		var data = GestureDataArray[index];
+
+	   		if(DivideByName[data.name]==null)
+	   		{
+	   			DivideByName[data.name] = [];
+	   		}
+
+	   		DivideByName[data.name].push(data);
+	   }
 
 	   //Get SameOrNot Data
 	   var SameOrNot = 
@@ -142,6 +188,7 @@
 	   		IntentRating[Data.intent].ratings.push(parseInt(Data.rating));
 
 	   };
+
 	   for(var intent in IntentRating)
 	   {
 	   		var sum  = 0;
@@ -156,13 +203,128 @@
 			IntentRating[intent].average = average;
 	   }
 
-		var Result = {};
-		Result.SameOrNot = SameOrNot;
-		Result.GestureDataArray = GestureDataArray;
-		Result.RawData = RawData;
-		Result.PreferData = PreferData;
-		Result.IntentRating = IntentRating;
-		console.log(Result);
+
+
+  		$.getJSON( "./fileList.json", function( data ) {
+
+//console.log(data);
+
+			
+
+  			for(var key in data.mp4)
+  			{
+  				var entry = data.mp4[key];
+  				if(entry.name.indexOf("-")>=0)
+  				{
+  					var str = entry.name.split(["-"]);
+
+  					var str2 = str[2].split([" "]);
+
+  					var str3 = str2[1].split(["."]);
+  					
+  					//console.log(str);
+  					var date = new Date(str[0], parseInt(str[1])-1, str2[0], str3[0], str3[1], str3[2], 0);
+  					entry.date = date;
+  				}
+  				else if(entry.name.indexOf("VID")>=0)
+  				{
+  					var fileNameArray = entry.name.split("_");
+
+  					var year = fileNameArray[1].substring(0,4);
+  					var month = fileNameArray[1].substring(4,6);
+  					var day = fileNameArray[1].substring(6,8);
+  					var hour = fileNameArray[2].substring(0,2);
+  					var min = fileNameArray[2].substring(2,4);
+  					var sec = fileNameArray[2].substring(4,6);
+
+  					var date = new Date(year, month-1, day, hour, min, sec, 0);
+  					entry.date = date;
+
+  					//console.log(entry.date);
+  				}
+  				else
+  				{
+  					var date = new Date(0, 0, 0, 0, 0, 0, 0);
+  					entry.date = date;
+  				}
+  			}
+
+  			data.mp4.sort(function(a, b){return a.date-b.date});
+
+  			//console.log(data.mp4);
+
+  			for(var key in GestureDataArray)
+  			{
+
+  				var entry = GestureDataArray[key];
+
+  				if(entry.video.indexOf("_")<0)
+  				{
+	  				var month = parseInt(entry.date.split("/")[0])-1;
+	  				var day = entry.date.split("/")[1];
+	  				var year = entry.date.split("/")[2].split(" ")[0];
+	  				var hour = entry.video.substring(0,2);
+	  				var min = entry.video.substring(2,4);
+	  				//console.log(min);
+	  				var sec = entry.video.substring(4,6);
+
+	  				entry.videoDate = new Date(year,month,day,hour,min,sec,0);
+
+	  				for(var fileIndex = 0;fileIndex<data.mp4.length;fileIndex++)
+	  				{
+	  					var fileData = data.mp4[fileIndex];
+
+	  					if(fileData.date >= entry.videoDate)
+	  					{
+
+	  						entry.file = fileData;
+	  						break;
+	  					}
+	  				}
+  				}
+  				else
+  				{
+  					//console.log("?");
+  					var error = true;
+
+  					for(var fileIndex = 0;fileIndex<data.mov.length;fileIndex++)
+	  				{
+	  					var fileData = data.mov[fileIndex];
+
+	  					if(fileData.name.indexOf(entry.video.trim())>=0)
+	  					{
+	  						entry.file = fileData;
+	  						error = false;
+	  						break;
+	  					}
+	  				}
+
+	  					if(error)
+	  					{
+	  						console.log("error:file not found " + entry.video + " [raw "+ entry.rawDataIndex +"]");
+	  					}
+  				}
+
+
+
+  			}
+
+
+
+	   		var Result = {};
+			Result.SameOrNot = SameOrNot;
+			Result.GestureDataArray = GestureDataArray;
+			Result.RawData = RawData;
+			Result.PreferData = PreferData;
+			Result.IntentRating = IntentRating;
+			Result.DivideByName = DivideByName;
+
+			console.log(Result);
+			console.log(data);
+	   });
+
+
+
 	});
 
 	</script>
