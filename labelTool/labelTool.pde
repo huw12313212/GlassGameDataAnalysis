@@ -8,6 +8,8 @@ Textlabel nameLabel;
 Textlabel pathLabel;
 Textlabel tagLabel;
 Textlabel videoLabel;
+Textlabel globalLabel;
+Textlabel localLabel;
 Textarea pathTextarea;
 ListBox listBox;
 //Textfield nameTextfield;
@@ -19,13 +21,18 @@ String fileName = "";
 String tagString = "";
 ArrayList<String> videosName;
 ArrayList<String> tagSet;
-String[] basicSet = {"一", "二", "三", "四"};
+ArrayList<String> globalSet;
 
 PrintWriter printWriter = null;
 CheckBox checkBox;
+CheckBox globalCheckBox;
 PFont font;
 
-TextField textField = new TextField("type here", 20);
+TextField textField = new TextField("", 20);
+JSONArray jsonArray;
+JSONObject globalObject;
+JSONObject localObject;
+boolean setting = true; 
 
 
 void setup() {
@@ -39,10 +46,14 @@ void setup() {
 	nameLabel.setFont(createFont("Georgia",16));
 	pathLabel = new Textlabel(controlP5, "Video Folder: ", 80, 35, 100, 25);
 	pathLabel.setFont(createFont("Georgia",16));
-	tagLabel = new Textlabel(controlP5, "New Tag: ", 450, 5, 80, 25);
-	tagLabel.setFont(createFont("Georgia", 16));
 	videoLabel = new Textlabel(controlP5, "", 80, 600, 150, 25);
 	videoLabel.setFont(createFont("Georgia", 16));
+	globalLabel = new Textlabel(controlP5, "Global", 1030, 80, 150, 25);
+	globalLabel.setFont(createFont("Georgia", 16));
+	localLabel = new Textlabel(controlP5, "Local", 880, 80, 150, 25);
+	localLabel.setFont(createFont("Georgia", 16));
+
+
 
 	
 	font = createFont("蘋果儷中黑", 12);
@@ -85,29 +96,37 @@ void setup() {
     controlP5.addButton("done")
     		 .setPosition(705, 80)
     		 .setSize(50, 30);
-    controlP5.addButton("add")
-    		 .setPosition(760, 5)
-    		 .setSize(60,30);
-    // controlP5.addTextfield("newTag")
-    //          .setPosition(1000, 35)
-    //          .setSize(150,25)
-    //          .setColor(color(255, 255, 0));
-    add(textField);
+    
     checkBox = controlP5.addCheckBox("tag")
-    					.setPosition(900, 80)
+    					.setPosition(860, 110)
     					.setColorForeground(color(255, 255, 0))
     					.setColorActive(color(255, 0, 0))
     					.setColorLabel(color(255, 255, 255))
     					.setSize(30, 30)
-    					.setItemsPerRow(2)
-    					.setSpacingColumn(100)
+    					.setItemsPerRow(1)
+    					.setSpacingColumn(120)
     					.setSpacingRow(20);
 
-    for(int i = 0;i < basicSet.length; i++){
-    	tagSet.add(basicSet[i]);
-    	checkBox.addItem(tagSet.get(i), i);
-    }
+    globalCheckBox = controlP5.addCheckBox("globalTag")
+    						  .setPosition(1030, 110)
+    						  .setColorForeground(color(255, 255, 0))
+		    				  .setColorActive(color(255, 0, 0))
+		    				  .setColorLabel(color(255, 255, 255))
+		    				  .setSize(30, 30)
+		    				  .setItemsPerRow(1)
+		    				  .setSpacingColumn(120)
+		    				  .setSpacingRow(20);
+	initTag();
+    
     textFont(font);
+    if(setting == true){
+	    controlP5.addButton("add")
+	    		 .setPosition(760, 5)
+	    		 .setSize(60,30);
+	    tagLabel = new Textlabel(controlP5, "New Tag: ", 450, 5, 80, 25);
+		tagLabel.setFont(createFont("Georgia", 16));
+		add(textField);
+	}
 
 }
 
@@ -115,7 +134,10 @@ void draw() {
 	background(0);
 	nameLabel.draw(this);
 	pathLabel.draw(this);
-	tagLabel.draw(this);
+	globalLabel.draw(this);
+	localLabel.draw(this);
+	if(setting)
+		tagLabel.draw(this);
 	videoLabel.draw(this);
 	if(movie != null){
 		image(movie, 40, 110, 800, 450);
@@ -151,10 +173,8 @@ public void confirm(){
 	if(name != null && name != ""){
 		String path = controlP5.get(Textfield.class, "pathValue").getText();
 		if(path != null && path != ""){
-			//videoDisplay(path);
 			folderPath = path;
 			videosName = getVideofile(path);
-			//println("get all files");
 			printWriter = createWriter(path + '/' + "result_" + name + ".csv");
 			next();
 		}
@@ -282,5 +302,27 @@ void keyPressed(){
 
 void movieEvent(Movie m) {
   m.read();
+}
+
+void readLog(String path){
+	if(path != null){
+		jsonArray = loadJSONArray(path + "log.json");
+	}
+}
+
+void initTag(){
+	globalObject = loadJSONObject("global.json");
+	globalSet = new ArrayList<String>();
+	JSONArray globalArray = globalObject.getJSONArray("global");
+	for(int i = 0; i < globalArray.size(); i++){
+		globalSet.add(globalArray.getString(i));
+		globalCheckBox.addItem(globalSet.get(i), i);
+	}
+	localObject = loadJSONObject("local.json");
+	// JSONObject localArray = localObject.getJSONObject("01");
+	// localArray.getJSONArray("body").append("fuck");
+	// saveJSONObject(localObject, "local.json");
+
+
 }
 
