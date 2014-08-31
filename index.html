@@ -73,12 +73,6 @@
 		   	}
 	   };
 
-
-
-
-
-
-
 	   var DivideByName = {};
 	   for(var index in GestureDataArray)
 	   {
@@ -135,7 +129,15 @@
 	   	"On-Body":[],
 	   	"Phone":[],
 	   	"In-Air":[],
-	   	"All":[]
+	   	"All":[],
+	   	"Intent":
+	   		{	
+
+	   		},
+	   	"IntentRating":
+	   		{
+
+	   		},
 	   };
 
 	   for (var i = 0; i < RawData.length; i++) 
@@ -166,14 +168,73 @@
 	   			GestureData.ConstraintType = ConstraintType[ConstraintIndex];
 		   		GestureData.name = CurrentData[userNameIndex];
 		   		GestureData.intent = CurrentData[intentIndex];
-		   		GestureData.rating = CurrentData[offset+firstRatingIndex];
+		   		GestureData.rating = parseInt(CurrentData[offset+firstRatingIndex]);
 		   		GestureData.method = CurrentData[offset+methodDescriptionIndex];
 		   		GestureData.rawDataIndex = i;
 
+		   		if(PreferData.Intent[GestureData.intent]==null)
+		   		{
+		   			PreferData.Intent[GestureData.intent]=
+		   			{
+		   				"Google":{
+			   				"On-Body":[],
+		   					"Phone":[],
+		   					"In-Air":[],
+		   					"All":[],
+	   					},
+	   					"Epson":{
+	   						"On-Body":[],
+		   					"Phone":[],
+		   					"In-Air":[],
+		   					"All":[],
+	   					}
+		   			};
+
+		   			PreferData.IntentRating[GestureData.intent]=
+		   			{
+		   				"Google":{
+	   					},
+	   					"Epson":{
+	   					}
+		   			};
+		   		}
+
 		   		PreferData[GestureData.ConstraintType].push(GestureData);
 		   		PreferData["All"].push(GestureData);
+
+		   		PreferData.Intent[GestureData.intent][GestureData.GlassType][GestureData.ConstraintType].push(GestureData);
+		   		PreferData.Intent[GestureData.intent][GestureData.GlassType]["All"].push(GestureData);
    			}
 	   }
+
+	   	for(var key in PreferData.Intent)
+		{
+			var data = PreferData.Intent[key];
+
+			for (var i = 0; i < GlassType.length; i++) {
+				var glassType = GlassType[i];
+				var glassTypeData = data[glassType];
+
+				for (var j = 0; j < ConstraintType.length; j++) {
+					var constraintType = ConstraintType[j];
+					var gestureArray = glassTypeData[constraintType];
+
+					var sum = 0;
+
+					for (var k = 0; k < gestureArray.length; k++) {
+						var gestureData = gestureArray[k];
+						sum += gestureData.rating;
+					};
+
+					var average = sum/gestureArray.length;
+
+					//console.log(glassType+":" + constraintType);
+					PreferData.IntentRating[key][glassType][constraintType] = average;
+				};
+
+			};
+		}
+
 
 	   //IntentRating
 	   var IntentRating = {};
@@ -338,11 +399,12 @@
 			Result.DivideByName = DivideByName;
 
 			console.log(Result);
-			console.log(data);
+			//console.log(data);
 
+			//printIntentAndPreferedConstraint(PreferData);
 			//printConstraintTypeAndRating(GestureDataArray);
 			//printIntentTypeAndRating(GestureDataArray);
-			printGlassTypeAndRating(GestureDataArray);
+			//printGlassTypeAndRating(GestureDataArray);
 
 			//$("p").text( JSON.stringify(GestureDataArray) );
 
@@ -389,7 +451,26 @@
 		};
 	};
 
+	var printIntentAndPreferedConstraint = function(PreferData)
+	{
+		$("p").append("GlassType,Google Glass,,,,Epson BT-200,,<br>");
+		$("p").append("Intent,On-Body,In-Air,Phone,,On-Body,In-Air,Phone<br>");
 
+		for(var key in PreferData.Intent)
+		{
+			var data = PreferData.Intent[key];
+
+			var googleData = data.Google;
+			var EpsonData = data.Epson;
+
+			$("p").append(key+","+googleData["On-Body"].length+","+googleData["In-Air"].length+","+googleData["Phone"].length+",,"+EpsonData["On-Body"].length+","+EpsonData["In-Air"].length+","+EpsonData["Phone"].length+",<br>");
+		}
+	}
+
+	var printIntentAndPreferedRating = function(PreferData)
+	{
+
+	}
 
 
 	</script>
