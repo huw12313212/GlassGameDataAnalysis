@@ -90,8 +90,11 @@
 	   var SameOrNot = 
 	   {
 	   		Same:[],
-	   		Different:[]
+	   		Different:[],
+	   		DifferentWithGroup:{}
 	   };
+
+
 
 	   for (var i = 0; i < RawData.length; i++) 
 	   {
@@ -100,13 +103,20 @@
    			for(var ConstraintCounter = 0; ConstraintCounter<ConstraintType.length;ConstraintCounter++)
    			{
 		   		var offset = ConstraintCounter*ConstraintTypeOffset;
+		   		var intent = CurrentData[intentIndex];
+		   		var constraint = ConstraintType[ConstraintCounter];
 		   		var google = CurrentData[methodDescriptionIndex+offset+GlassTypeOffset*0];
 		   		var epson = CurrentData[methodDescriptionIndex+offset+GlassTypeOffset*1];
+		   		var DifferentWithGroup = SameOrNot.DifferentWithGroup;
+		   		var userName = CurrentData[userNameIndex];
 
 		   		var method = {};
 		   		method.rawDataIndex = i;
 		   		method.google = google;
 		   		method.epson = epson;
+		   		method.intent = intent;
+		   		method.constraint = constraint;
+		   		method.userName = userName;
 
 		   		if(method.google.trim().substring(0, 1)=="同"||method.epson.trim().substring(0, 1)=="同")
 		   		{
@@ -118,10 +128,24 @@
 		   		}
 		   		else
 		   		{
+
 		   			SameOrNot.Different.push(method);
+
+		   			if(DifferentWithGroup[intent]==null)DifferentWithGroup[intent]=
+		   			{
+		   					"On-Body":[],
+						   	"Phone":[],
+						   	"In-Air":[],
+		   			};
+
+		   			DifferentWithGroup[intent][constraint].push(method);
+
 		   		}
+
+
 		   	}
 	   };
+	 
 
 	   //Get Prefer Sequence
 	   var PreferData = 
@@ -359,6 +383,8 @@
   				}
   			}
 
+  	
+
 	   		var Result = {};
 			Result.SameOrNot = SameOrNot;
 			Result.GestureDataArray = GestureDataArray;
@@ -372,13 +398,16 @@
 			console.log(Result);
 			//console.log(data);
 
-			printIntentAndPreferedRating(IntentRating);
-			//printIntentAndPreferedConstraint(PreferData);
-			//printConstraintTypeAndRating(GestureDataArray);
-			//printIntentTypeAndRating(GestureDataArray);
-			//printGlassTypeAndRating(GestureDataArray);
+			//printDifferentMethod(SameOrNot);
+			//printIntentAndPreferedRating(IntentRating); // 全部 Rating 分佈
+			//printIntentAndPreferedConstraint(PreferData); // 全部 Prefer 分佈
+			//printConstraintTypeAndRating(GestureDataArray); //Constraint 與 User Ratin
+			//printGlassTypeAndRating(GestureDataArray); //GlassType與UserRating的關係
 
-			//$("p").text( JSON.stringify(GestureDataArray) );
+
+			//printIntentTypeAndRating(GestureDataArray);
+
+			$("p").text( JSON.stringify(GestureDataArray) );
 
 	   });
 	});
@@ -451,6 +480,17 @@
 			var EpsonData = data.Epson;
 
 			$("p").append(key+","+googleData["On-Body"]+","+googleData["In-Air"]+","+googleData["Phone"]+",,"+EpsonData["On-Body"]+","+EpsonData["In-Air"]+","+EpsonData["Phone"]+",<br>");
+		}
+	}
+
+	var printDifferentMethod = function(SameOrNot)
+	{
+		$("p").append("Intent,On-Body,In-Air,Phone,<br>");
+
+		for(var key in SameOrNot)
+		{
+			var data = SameOrNot[key];
+			$("p").append(key+","+data["On-Body"].length+","+data["In-Air"].length+","+data["Phone"].length+"<br>");	
 		}
 	}
 
