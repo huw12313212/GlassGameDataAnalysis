@@ -1,15 +1,85 @@
 {
-  "01": {
+  "08": {
     "On-Body": [],
     "Phone": [],
     "In-Air": []
+  },
+  "09": {
+    "On-Body": [],
+    "Phone": [],
+    "In-Air": []
+  },
+  "17": {
+    "On-Body": [],
+    "Phone": [],
+    "In-Air": []
+  },
+  "04": {
+    "On-Body": [],
+    "Phone": [],
+    "In-Air": []
+  },
+  "05": {
+    "On-Body": [],
+    "Phone": [],
+    "In-Air": []
+  },
+  "15": {
+    "On-Body": [],
+    "Phone": [],
+    "In-Air": []
+  },
+  "06": {
+    "On-Body": [],
+    "Phone": [],
+    "In-Air": []
+  },
+  "16": {
+    "On-Body": [],
+    "Phone": [],
+    "In-Air": []
+  },
+  "07": {
+    "On-Body": [],
+    "Phone": [],
+    "In-Air": []
+  },
+  "13": {
+    "On-Body": [],
+    "Phone": [],
+    "In-Air": []
+  },
+  "14": {
+    "On-Body": [],
+    "Phone": [],
+    "In-Air": []
+  },
+  "01": {
+    "On-Body": [],
+    "Phone": [],
+    "In-Air": ["測試"]
   },
   "02": {
     "On-Body": [],
     "Phone": [],
     "In-Air": []
   },
+  "11": {
+    "On-Body": [],
+    "Phone": [],
+    "In-Air": []
+  },
   "03": {
+    "On-Body": [],
+    "Phone": [],
+    "In-Air": []
+  },
+  "12": {
+    "On-Body": [],
+    "Phone": [],
+    "In-Air": []
+  },
+  "10": {
     "On-Body": [],
     "Phone": [],
     "In-Air": []
