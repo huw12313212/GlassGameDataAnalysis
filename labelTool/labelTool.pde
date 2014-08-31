@@ -11,6 +11,7 @@ Textlabel videoLabel;
 Textlabel globalLabel;
 Textlabel localLabel;
 Textlabel descriptionLabel;
+Textlabel numLabel;
 Textarea pathTextarea;
 ListBox listBox;
 //Textfield nameTextfield;
@@ -36,7 +37,7 @@ JSONArray jsonArray;
 JSONObject globalObject;
 JSONObject localObject = null;
 boolean setting = true; 
-
+boolean firstTime = true;
 
 void setup() {
 	size(1280, 768);
@@ -58,10 +59,9 @@ void setup() {
 	globalLabel.setFont(createFont("Georgia", 16));
 	localLabel = new Textlabel(controlP5, "Local", 880, 80, 150, 25);
 	localLabel.setFont(createFont("Georgia", 16));
+	numLabel = new Textlabel(controlP5, "Start Num: ", 100, 80, 150, 25);
+	numLabel.setFont(createFont("Georgia", 16));
 
-
-
-	
 	font = createFont("蘋果儷中黑", 12);
 	//textFont(font);
 	ControlFont controlFont = new ControlFont(font, 12);
@@ -79,7 +79,7 @@ void setup() {
              .setFont(createFont("arial",14))
              .setColor(color(255, 255, 0));
     controlP5.addButton("confirm")
-    		 .setPosition(100, 80)
+    		 .setPosition(325, 80)
     		 .setSize(80, 30);
     controlP5.addButton("choose")
     		 .setPosition(375, 35)
@@ -102,6 +102,11 @@ void setup() {
     controlP5.addButton("done")
     		 .setPosition(705, 80)
     		 .setSize(50, 30);
+    controlP5.addTextfield("numValue")
+    		 .setPosition(220, 80)
+    		 .setSize(100, 25)
+    		 .setFont(createFont("arial",14))
+			 .setColor(color(255, 255, 0));
     
     checkBox = controlP5.addCheckBox("tag")
     					.setPosition(860, 110)
@@ -123,7 +128,6 @@ void setup() {
 		    				  .setSpacingColumn(120)
 		    				  .setSpacingRow(5);
 	initTag();
-    
     textFont(font);
     if(setting == true){
 	    controlP5.addButton("add")
@@ -146,8 +150,16 @@ void draw() {
 		tagLabel.draw(this);
 	videoLabel.draw(this);
 	descriptionLabel.draw(this);
+	numLabel.draw(this);
 	if(movie != null){
-		image(movie, 40, 110, 800, 450);
+		if(!fileName.substring(0, 3).equals("IMG"))
+			image(movie, 40, 110, 800, 450);
+		else {
+			//pushMatrix();
+			//rotate(PI * 1.5);
+			image(movie, 40, 110, 800, 450);
+			//popMatrix();
+		}
 	}
 	if(movie == null){
 		isPlaying = false;
@@ -175,16 +187,33 @@ public void choose(){
 } 
 
 public void confirm(){
-	String name = controlP5.get(Textfield.class, "nameValue").getText();
-	fileName = name;
-	if(name != null && name != ""){
-		String path = controlP5.get(Textfield.class, "pathValue").getText();
-		if(path != null && path != ""){
-			folderPath = path;
-			//videosName = getVideofile(path);
-			jsonArray = loadJSONArray("log.json");
-			//readLog(0);
-			printWriter = createWriter(path + '/' + "result_" + name + ".csv");
+	if(firstTime){
+		String name = controlP5.get(Textfield.class, "nameValue").getText();
+		fileName = name;
+		if(name != null && name != ""){
+			String path = controlP5.get(Textfield.class, "pathValue").getText();
+			if(path != null && path != ""){
+				folderPath = path;
+				//videosName = getVideofile(path);
+				jsonArray = loadJSONArray("log.json");
+				//readLog(0);
+				println(controlP5.get(Textfield.class, "numValue").getText());
+				if(controlP5.get(Textfield.class, "numValue").getText().length() > 0){
+					int start = Integer.parseInt(controlP5.get(Textfield.class, "numValue").getText());
+					movieIndex = start - 1;
+					//println(movieIndex);
+				}
+				printWriter = createWriter(path + '/' + "result_" + name + ".csv");
+				next();
+				//checkBox.removeItem("rrrr");
+			}
+		}
+	}else{
+		println(controlP5.get(Textfield.class, "numValue").getText());
+		if(controlP5.get(Textfield.class, "numValue").getText().length() > 0){
+			int start = Integer.parseInt(controlP5.get(Textfield.class, "numValue").getText());
+			movieIndex = start - 1;
+			//println(movieIndex);
 			next();
 		}
 	}
@@ -192,10 +221,14 @@ public void confirm(){
 
 public void next(){
 	//String tagString = "";
-	if(movieIndex < jsonArray.size()){
+	//println("fuck: " + fuck);
+	if(movieIndex + 1 < jsonArray.size()){
 		println("var: "+movieIndex);
-		if(movieIndex != 0){
-			tagString += (val[0] + "_" + val[1] + "_" + val[2]);
+		if(!firstTime){
+
+			movieIndex++;
+			tagString = "";
+			tagString += (val[0] + "_" + val[1] + "_" + val[2] + ", ");
 			for(int i = 0;i < checkBox.getArrayValue().length; i++){
 				int state = (int) checkBox.getArrayValue()[i];
 				if(state == 1){
@@ -208,24 +241,32 @@ public void next(){
 					tagString += (globalSet.get(i) + ", ");
 				}
 			}
-			if(tagString != null && tagString != ""){
+			if(!tagString.equals((val[0] + "_" + val[1] + "_" + val[2] + ", ")) && !tagString.equals("")){
 				//printWriter.println(tagString);
-				if(movieIndex >= buffer.size()){
+				tagString+= "\n";
+				if(movieIndex - 1 >= buffer.size()){
 					buffer.add(tagString);
 				}else{
-					buffer.set(movieIndex, tagString);
+				 	buffer.set(movieIndex - 1, tagString);
 				}
 			}
+			
 		}
+		else {
+			firstTime = false;
+		}
+		println(buffer);
 		checkBox.deactivateAll();
 		globalCheckBox.deactivateAll();
 		//printWriter.flush();
 		val = readLog(movieIndex);
+		fileName = val[6];
 		videoDisplay(folderPath + '/' + val[6]);
 		videoLabel.setText(val[7] + "--" + val[0] + "--" + val[1] + "--" + val[2] + ": " + val[6]);
 		descriptionLabel.setText(val[3] + "\n\n" + val[4] + "\nrating: " + val[5]);
+		//if(prevType.equals())
 		loadTag(val[1], val[7].substring(0, 2));
-		movieIndex++;
+		readTags();
 	}
 }
 
@@ -250,14 +291,38 @@ void loadTag(String type, String intent){
 	if(localObject != null){
 		JSONObject localIntent = localObject.getJSONObject(intent);
 		JSONArray localTags = localIntent.getJSONArray(type);
+		println("tag: " + tagSet.size());
+		int j = 0;
+		int llength = tagSet.size();
+		clearCheckBox();
+		// for(int i = 0; i < llength; i++){
+		// 	println("gan " + tagSet.size() + " fuck: " + checkBox.getArrayValue().length);
+		// 	println(tagSet.get(i) + ":");
+		// 	checkBox.removeItem(tagSet.get(i));
+		// 	println("sexy");
+		// 	//tagSet.remove(i);
+		// }
 		tagSet.clear();
 		for(int i = 0; i < localTags.size(); i++){
 			tagSet.add(localTags.getString(i));
 		}
 		for(int i = 0; i < tagSet.size(); i++){
-			checkBox.addItem(tagSet.get(i), i);
+			checkBox.addItem(tagSet.get(i), 100 * movieIndex - i);
 		}
 	}
+}
+
+void clearCheckBox(){
+	controlP5.remove("tag");
+	checkBox = controlP5.addCheckBox("tag")
+    					.setPosition(860, 110)
+    					.setColorForeground(color(255, 255, 0))
+    					.setColorActive(color(255, 0, 0))
+    					.setColorLabel(color(255, 255, 255))
+    					.setSize(20, 20)
+    					.setItemsPerRow(1)
+    					.setSpacingColumn(120)
+    					.setSpacingRow(5);
 }
 
 public void pause(){
@@ -276,32 +341,37 @@ public void play(){
 
 public void back(){
 	if(movieIndex < jsonArray.size() && movieIndex > 0){
-		movieIndex-=2;
+		movieIndex--;
+		//next();
 		val = readLog(movieIndex);
+		fileName = val[6];
 		videoDisplay(folderPath + '/' + val[6]);
 		videoLabel.setText(val[7] + "--" + val[0] + "--" + val[1] + "--" + val[2] + ": " + val[6]);
-		descriptionLabel.setText(val[3] + "\n\n" + val[4] + "\nrating: " + val[5]);
+		descriptionLabel.setText(val[3] + "\n\nWhy: " + val[4] + "\nrating: " + val[5]);
 		loadTag(val[1], val[7].substring(0, 2));
 		readTags();
-		movieIndex++;
+		// movieIndex++;
 	}
 }
 
 void readTags(){
-	String data = buffer.get(movieIndex);
-
-	// String data[] = loadStrings("result_" + fileName + ".csv");
-	// String dataLine = data[movieIndex];
-	String token[] = split(data, ", ");
-	for(int i = 1; i < token.length; i++){
-		for(int j = 0;j < tagSet.size(); j++){
-			if(token[i].equals(tagSet.get(j))){
-				checkBox.activate(j);
+	if(buffer.size() > movieIndex && movieIndex >= 0){
+		String data = buffer.get(movieIndex);
+		// String data[] = loadStrings("result_" + fileName + ".csv");
+		// String dataLine = data[movieIndex];
+		checkBox.deactivateAll();
+		globalCheckBox.deactivateAll();
+		String token[] = split(data, ", ");
+		for(int i = 1; i < token.length; i++){
+			for(int j = 0;j < tagSet.size(); j++){
+				if(token[i].equals(tagSet.get(j))){
+					checkBox.activate(j);
+				}
 			}
-		}
-		for(int j = 0;j < globalSet.size(); j++){
-			if(token[i].equals(globalSet.get(j))){
-				globalCheckBox.activate(j);
+			for(int j = 0;j < globalSet.size(); j++){
+				if(token[i].equals(globalSet.get(j))){
+					globalCheckBox.activate(j);
+				}
 			}
 		}
 	}
@@ -322,7 +392,30 @@ public void done(){
 	// if(tagString != null && tagString != ""){
 	// 	printWriter.println(videosName.get(movieIndex) + ", " + tagString);
 	// }
-	next();
+	tagString = "";
+	tagString += (val[0] + "_" + val[1] + "_" + val[2] + ", ");
+	for(int i = 0;i < checkBox.getArrayValue().length; i++){
+		int state = (int) checkBox.getArrayValue()[i];
+		if(state == 1){
+			tagString += (tagSet.get(i) + ", ");
+		}
+	}
+	for(int i = 0;i < globalCheckBox.getArrayValue().length; i++){
+		int state = (int) globalCheckBox.getArrayValue()[i];
+		if(state == 1){
+			tagString += (globalSet.get(i) + ", ");
+		}
+	}
+	if(!tagString.equals((val[0] + "_" + val[1] + "_" + val[2] + ", ")) && !tagString.equals("")){
+		//printWriter.println(tagString);
+		tagString+= "\n";
+		if(movieIndex >= buffer.size()){
+			buffer.add(tagString);
+		}else{
+		 	buffer.set(movieIndex - 1, tagString);
+		}
+	}
+	
 	for(int i = 0;i < buffer.size();i++){
 		printWriter.println(buffer.get(i));
 	}
@@ -335,7 +428,7 @@ public void done(){
 public void add(){
 	String addTag = textField.getText();
 	if(!addTag.equals("")){
-		//tagSet.add(addTag);
+		tagSet.add(addTag);
 		localObject.getJSONObject(val[7].substring(0, 2)).getJSONArray(val[1]).append(addTag);
 		checkBox.addItem(addTag, tagSet.size() - 1);
 		textField.setText("");
@@ -392,8 +485,6 @@ void movieEvent(Movie m) {
   m.read();
 }
 
-
-
 void initTag(){
 	globalObject = loadJSONObject("global.json");
 	globalSet = new ArrayList<String>();
@@ -407,8 +498,5 @@ void initTag(){
 		println("You don't have local.json");
 		exit();
 	}
-	// JSONObject localArray = localObject.getJSONObject("01");
-	// localArray.getJSONArray("body").append("fuck");
-	// saveJSONObject(localObject, "local.json");
 }
 
