@@ -1,3 +1,8 @@
 {
-	"global":["一", "二", "三", "四"]
+	"global":["0-static pose","0-dynamic pose","0-static pose and path","0-dynamic pose and path","0-one-point touch","0-one-point path",
+ "1-symbolic","1-physical","1-metaphorical","1-abstract",
+ "2-object-centric","2-world-dependent","2-world-independent","2-mixed dependencies",
+ "3-discrete","3-continuous",
+ "4-Direct Control","4-IndirectControl",
+ "5-面前","5-胸前","5-腹部或以下","6-影片有問題", "6-不知道怎麼分"]
 }
