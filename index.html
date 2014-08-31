@@ -40,7 +40,7 @@
 		   			GestureData.ConstraintType = ConstraintType[ConstraintCounter];
 			   		GestureData.name = CurrentData[userNameIndex];
 			   		GestureData.intent = CurrentData[intentIndex];
-			   		GestureData.rating = CurrentData[offset+firstRatingIndex];
+			   		GestureData.rating = parseInt(CurrentData[offset+firstRatingIndex]);
 			   		GestureData.why = CurrentData[offset+whyIndex];
 			   		GestureData.video = CurrentData[offset+videoIndex];
 			   		GestureData.method = CurrentData[offset+methodDescriptionIndex];
@@ -73,12 +73,6 @@
 		   	}
 	   };
 
-
-
-
-
-
-
 	   var DivideByName = {};
 	   for(var index in GestureDataArray)
 	   {
@@ -96,8 +90,11 @@
 	   var SameOrNot = 
 	   {
 	   		Same:[],
-	   		Different:[]
+	   		Different:[],
+	   		DifferentWithGroup:{}
 	   };
+
+
 
 	   for (var i = 0; i < RawData.length; i++) 
 	   {
@@ -106,13 +103,20 @@
    			for(var ConstraintCounter = 0; ConstraintCounter<ConstraintType.length;ConstraintCounter++)
    			{
 		   		var offset = ConstraintCounter*ConstraintTypeOffset;
+		   		var intent = CurrentData[intentIndex];
+		   		var constraint = ConstraintType[ConstraintCounter];
 		   		var google = CurrentData[methodDescriptionIndex+offset+GlassTypeOffset*0];
 		   		var epson = CurrentData[methodDescriptionIndex+offset+GlassTypeOffset*1];
+		   		var DifferentWithGroup = SameOrNot.DifferentWithGroup;
+		   		var userName = CurrentData[userNameIndex];
 
 		   		var method = {};
 		   		method.rawDataIndex = i;
 		   		method.google = google;
 		   		method.epson = epson;
+		   		method.intent = intent;
+		   		method.constraint = constraint;
+		   		method.userName = userName;
 
 		   		if(method.google.trim().substring(0, 1)=="同"||method.epson.trim().substring(0, 1)=="同")
 		   		{
@@ -124,10 +128,24 @@
 		   		}
 		   		else
 		   		{
+
 		   			SameOrNot.Different.push(method);
+
+		   			if(DifferentWithGroup[intent]==null)DifferentWithGroup[intent]=
+		   			{
+		   					"On-Body":[],
+						   	"Phone":[],
+						   	"In-Air":[],
+		   			};
+
+		   			DifferentWithGroup[intent][constraint].push(method);
+
 		   		}
+
+
 		   	}
 	   };
+	 
 
 	   //Get Prefer Sequence
 	   var PreferData = 
@@ -135,7 +153,11 @@
 	   	"On-Body":[],
 	   	"Phone":[],
 	   	"In-Air":[],
-	   	"All":[]
+	   	"All":[],
+	   	"Intent":
+	   		{	
+
+	   		},
 	   };
 
 	   for (var i = 0; i < RawData.length; i++) 
@@ -166,52 +188,89 @@
 	   			GestureData.ConstraintType = ConstraintType[ConstraintIndex];
 		   		GestureData.name = CurrentData[userNameIndex];
 		   		GestureData.intent = CurrentData[intentIndex];
-		   		GestureData.rating = CurrentData[offset+firstRatingIndex];
+		   		GestureData.rating = parseInt(CurrentData[offset+firstRatingIndex]);
 		   		GestureData.method = CurrentData[offset+methodDescriptionIndex];
 		   		GestureData.rawDataIndex = i;
+
+		   		if(PreferData.Intent[GestureData.intent]==null)
+		   		{
+		   			PreferData.Intent[GestureData.intent]=
+		   			{
+		   				"Google":{
+			   				"On-Body":[],
+		   					"Phone":[],
+		   					"In-Air":[],
+		   					"All":[],
+	   					},
+	   					"Epson":{
+	   						"On-Body":[],
+		   					"Phone":[],
+		   					"In-Air":[],
+		   					"All":[],
+	   					}
+		   			};
+		   		}
 
 		   		PreferData[GestureData.ConstraintType].push(GestureData);
 		   		PreferData["All"].push(GestureData);
    			}
 	   }
 
+
 	   //IntentRating
-	   var IntentRating = {};
-	   for (var i = 0; i < PreferData["All"].length; i++) {
+	   var GroupData = {};
 
-	   		Data = PreferData["All"][i];
+	   for (var i = 0; i < GestureDataArray.length; i++) {
 
-	   		if(IntentRating[Data.intent]==null)
+	   		var data = GestureDataArray[i];
+
+	   		if(GroupData[data.intent]==null)
 	   		{
-	   			IntentRating[Data.intent] = {datas:[],ratings:[]};
+	   			GroupData[data.intent] = 
+	   			{
+   					"Google":{
+		   				"On-Body":[],
+	   					"Phone":[],
+	   					"In-Air":[],
+   					},
+   					"Epson":{
+   						"On-Body":[],
+	   					"Phone":[],
+	   					"In-Air":[],
+   					}
+	   			}
 	   		}
 
-	   		IntentRating[Data.intent].datas.push(Data);
-	   		IntentRating[Data.intent].ratings.push(parseInt(Data.rating));
-
+	   		GroupData[data.intent][data.GlassType][data.ConstraintType].push(data);
 	   };
 
-	   for(var intent in IntentRating)
+	   var IntentRating = {};
+	   for(var intentType in GroupData)
 	   {
-	   		var sum  = 0;
-			var datas = IntentRating[intent].datas;
+	   		IntentRating[intentType] = {};
 
-			for (var i = 0; i < datas.length; i++) {
-				data = datas[i];
-				sum += parseInt(data.rating);
-			};
+	   		for(var glassType in GroupData[intentType])
+	   		{
+	   			IntentRating[intentType][glassType] = {};
 
-			var average = sum/datas.length;
-			IntentRating[intent].average = average;
+	   			for(var constraintType in GroupData[intentType][glassType])
+	   			{
+	   				IntentRating[intentType][glassType][constraintType] = 0;
+
+	   				var sum = 0;
+	   				for (var i = 0; i < GroupData[intentType][glassType][constraintType].length; i++) {
+	   					var data = GroupData[intentType][glassType][constraintType][i];
+	   					sum += data.rating;
+	   				};
+
+	   				IntentRating[intentType][glassType][constraintType]  = sum / GroupData[intentType][glassType][constraintType].length;
+	   			}
+	   		}
 	   }
 
 
 
   		$.getJSON( "./fileList.json", function( data ) {
-
-//console.log(data);
-
-			
 
   			for(var key in data.mp4)
   			{
@@ -322,29 +381,33 @@
 	  						console.log("error:file not found " + entry.video + " [raw "+ entry.rawDataIndex +"]");
 	  					}
   				}
-
-
-
   			}
 
-
+  	
 
 	   		var Result = {};
 			Result.SameOrNot = SameOrNot;
 			Result.GestureDataArray = GestureDataArray;
+			Result.GroupData = GroupData;
 			Result.RawData = RawData;
 			Result.PreferData = PreferData;
 			Result.IntentRating = IntentRating;
 			Result.DivideByName = DivideByName;
 
+
 			console.log(Result);
-			console.log(data);
+			//console.log(data);
 
-			//printConstraintTypeAndRating(GestureDataArray);
+			//printDifferentMethod(SameOrNot);
+			//printIntentAndPreferedRating(IntentRating); // 全部 Rating 分佈
+			//printIntentAndPreferedConstraint(PreferData); // 全部 Prefer 分佈
+			//printConstraintTypeAndRating(GestureDataArray); //Constraint 與 User Ratin
+			//printGlassTypeAndRating(GestureDataArray); //GlassType與UserRating的關係
+
+
 			//printIntentTypeAndRating(GestureDataArray);
-			printGlassTypeAndRating(GestureDataArray);
 
-			//$("p").text( JSON.stringify(GestureDataArray) );
+			$("p").text( JSON.stringify(GestureDataArray) );
 
 	   });
 	});
@@ -389,7 +452,47 @@
 		};
 	};
 
+	var printIntentAndPreferedConstraint = function(PreferData)
+	{
+		$("p").append("GlassType,Google Glass,,,,Epson BT-200,,<br>");
+		$("p").append("Intent,On-Body,In-Air,Phone,,On-Body,In-Air,Phone<br>");
 
+		for(var key in PreferData.Intent)
+		{
+			var data = PreferData.Intent[key];
+
+			var googleData = data.Google;
+			var EpsonData = data.Epson;
+
+			$("p").append(key+","+googleData["On-Body"].length+","+googleData["In-Air"].length+","+googleData["Phone"].length+",,"+EpsonData["On-Body"].length+","+EpsonData["In-Air"].length+","+EpsonData["Phone"].length+",<br>");
+		}
+	}
+
+	var printIntentAndPreferedRating = function(IntentRating)
+	{
+		$("p").append("GlassType,Google Glass,,,,Epson BT-200,,<br>");
+		$("p").append("Intent,On-Body,In-Air,Phone,,On-Body,In-Air,Phone<br>");
+		for(var key in IntentRating)
+		{
+			var data = IntentRating[key];
+
+			var googleData = data.Google;
+			var EpsonData = data.Epson;
+
+			$("p").append(key+","+googleData["On-Body"]+","+googleData["In-Air"]+","+googleData["Phone"]+",,"+EpsonData["On-Body"]+","+EpsonData["In-Air"]+","+EpsonData["Phone"]+",<br>");
+		}
+	}
+
+	var printDifferentMethod = function(SameOrNot)
+	{
+		$("p").append("Intent,On-Body,In-Air,Phone,<br>");
+
+		for(var key in SameOrNot)
+		{
+			var data = SameOrNot[key];
+			$("p").append(key+","+data["On-Body"].length+","+data["In-Air"].length+","+data["Phone"].length+"<br>");	
+		}
+	}
 
 
 	</script>
