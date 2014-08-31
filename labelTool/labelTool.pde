@@ -194,18 +194,17 @@ public void confirm(){
 			String path = controlP5.get(Textfield.class, "pathValue").getText();
 			if(path != null && path != ""){
 				folderPath = path;
-				//videosName = getVideofile(path);
+				File file = new File(folderPath);
+				println("video size: " + file.list().length);
 				jsonArray = loadJSONArray("log.json");
-				//readLog(0);
+				println("SIZE: " + jsonArray.size());
 				println(controlP5.get(Textfield.class, "numValue").getText());
 				if(controlP5.get(Textfield.class, "numValue").getText().length() > 0){
 					int start = Integer.parseInt(controlP5.get(Textfield.class, "numValue").getText());
 					movieIndex = start - 1;
-					//println(movieIndex);
 				}
 				printWriter = createWriter(path + '/' + "result_" + name + ".csv");
 				next();
-				//checkBox.removeItem("rrrr");
 			}
 		}
 	}else{
@@ -225,29 +224,32 @@ public void next(){
 	if(movieIndex + 1 < jsonArray.size()){
 		println("var: "+movieIndex);
 		if(!firstTime){
-
 			movieIndex++;
 			tagString = "";
-			tagString += (val[0] + "_" + val[1] + "_" + val[2] + ", ");
-			for(int i = 0;i < checkBox.getArrayValue().length; i++){
-				int state = (int) checkBox.getArrayValue()[i];
-				if(state == 1){
-					tagString += (tagSet.get(i) + ", ");
+			String uid = val[0] + "_" + val[1] + "_" + val[2] + ", ";
+			tagString += uid;
+			println("array:" + checkBox.getArrayValue());
+			if(checkBox.getArrayValue() != null){
+				for(int i = 0;i < checkBox.getArrayValue().length; i++){
+					int state = (int) checkBox.getArrayValue()[i];
+					if(state == 1){
+						tagString += (tagSet.get(i) + ", ");
+					}
 				}
-			}
-			for(int i = 0;i < globalCheckBox.getArrayValue().length; i++){
-				int state = (int) globalCheckBox.getArrayValue()[i];
-				if(state == 1){
-					tagString += (globalSet.get(i) + ", ");
+				for(int i = 0;i < globalCheckBox.getArrayValue().length; i++){
+					int state = (int) globalCheckBox.getArrayValue()[i];
+					if(state == 1){
+						tagString += (globalSet.get(i) + ", ");
+					}
 				}
-			}
-			if(!tagString.equals((val[0] + "_" + val[1] + "_" + val[2] + ", ")) && !tagString.equals("")){
-				//printWriter.println(tagString);
-				tagString+= "\n";
-				if(movieIndex - 1 >= buffer.size()){
-					buffer.add(tagString);
-				}else{
-				 	buffer.set(movieIndex - 1, tagString);
+				if(!tagString.equals(uid) && !tagString.equals("")){
+					println("tagString: " + tagString);
+					tagString+= "\n";
+					if(movieIndex - 1 >= buffer.size()){
+						buffer.add(tagString);
+					}else{
+					 	buffer.set(movieIndex - 1, tagString);
+					}
 				}
 			}
 			
@@ -255,6 +257,7 @@ public void next(){
 		else {
 			firstTime = false;
 		}
+		println("fuck4");
 		println(buffer);
 		checkBox.deactivateAll();
 		globalCheckBox.deactivateAll();
@@ -274,13 +277,12 @@ String[] readLog(int index){
 	String[] value = {"", "", "", "", "", "", "" , ""};
 	if(index < jsonArray.size()){
 		JSONObject obj = jsonArray.getJSONObject(index);
-		//println(obj.getJSONObject("file").getString("name"));
 		value[0] = obj.getString("GlassType");
 		value[1] = obj.getString("ConstraintType");
 		value[2] = obj.getString("name");
 		value[3] = obj.getString("method");
 		value[4] = obj.getString("why");
-		value[5] = obj.getString("rating");
+		value[5] = Integer.toString(obj.getInt("rating"));
 		value[6] = obj.getJSONObject("file").getString("name");
 		value[7] = obj.getString("intent");
 	}
@@ -295,13 +297,6 @@ void loadTag(String type, String intent){
 		int j = 0;
 		int llength = tagSet.size();
 		clearCheckBox();
-		// for(int i = 0; i < llength; i++){
-		// 	println("gan " + tagSet.size() + " fuck: " + checkBox.getArrayValue().length);
-		// 	println(tagSet.get(i) + ":");
-		// 	checkBox.removeItem(tagSet.get(i));
-		// 	println("sexy");
-		// 	//tagSet.remove(i);
-		// }
 		tagSet.clear();
 		for(int i = 0; i < localTags.size(); i++){
 			tagSet.add(localTags.getString(i));
@@ -342,6 +337,7 @@ public void play(){
 public void back(){
 	if(movieIndex < jsonArray.size() && movieIndex > 0){
 		movieIndex--;
+		println("index: " + movieIndex);
 		//next();
 		val = readLog(movieIndex);
 		fileName = val[6];
