@@ -337,6 +337,9 @@
 
   				if(entry.video.indexOf("_")<0)
   				{
+  					if(entry.video.length == 5)entry.video= "0"+entry.video;
+  					else if(entry.video.length!=6)console.log("weird video number:"+entry.video);
+
 	  				var month = parseInt(entry.date.split("/")[0])-1;
 	  				var day = entry.date.split("/")[1];
 	  				var year = entry.date.split("/")[2].split(" ")[0];
@@ -358,6 +361,8 @@
 	  						break;
 	  					}
 	  				}
+
+	  				//console.log("error:file not found " + entry.video + " [raw "+ entry.rawDataIndex +"]");
   				}
   				else
   				{
@@ -383,6 +388,14 @@
   				}
   			}
 
+  			for (var i = 0; i < GestureDataArray.length; i++) {
+  				if(GestureDataArray[i].file == null)
+  				{
+  					console.log("File Not fond");
+  					console.log(GestureDataArray[i]);
+  				}
+  			};
+
   	
 
 	   		var Result = {};
@@ -395,10 +408,10 @@
 			Result.DivideByName = DivideByName;
 
 
-			console.log(Result);
-			//console.log(data);
+			//console.log(Result);
+			console.log(data);
 
-			//printDifferentMethod(SameOrNot);
+			//printDifferentMethod(SameOrNot.DifferentWithGroup);
 			//printIntentAndPreferedRating(IntentRating); // 全部 Rating 分佈
 			//printIntentAndPreferedConstraint(PreferData); // 全部 Prefer 分佈
 			//printConstraintTypeAndRating(GestureDataArray); //Constraint 與 User Ratin
@@ -483,13 +496,14 @@
 		}
 	}
 
-	var printDifferentMethod = function(SameOrNot)
+	var printDifferentMethod = function(SameOrNotGroup)
 	{
 		$("p").append("Intent,On-Body,In-Air,Phone,<br>");
 
-		for(var key in SameOrNot)
+		//console.log(SameOrNotGroup.length);
+		for(var key in SameOrNotGroup)
 		{
-			var data = SameOrNot[key];
+			var data = SameOrNotGroup[key];
 			$("p").append(key+","+data["On-Body"].length+","+data["In-Air"].length+","+data["Phone"].length+"<br>");	
 		}
 	}
