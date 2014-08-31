@@ -340,13 +340,55 @@
 			console.log(Result);
 			console.log(data);
 
-			$("p").text( JSON.stringify(GestureDataArray) );
+			//printConstraintTypeAndRating(GestureDataArray);
+			//printIntentTypeAndRating(GestureDataArray);
+			printGlassTypeAndRating(GestureDataArray);
+
+			//$("p").text( JSON.stringify(GestureDataArray) );
 
 	   });
-
-
-
 	});
+
+	var printIntentTypeAndRating = function (GestureDataArray)
+	{
+		$("p").append("gestureName,rating<br>");
+
+		for (var i = 0; i < GestureDataArray.length; i++) 
+		{
+			var gesture = GestureDataArray[i];
+			var gestureID = gesture.intent.substring(0,2);
+			var line = gesture.intent + "," + gesture.rating + "<br>";
+			$("p").append(line);
+
+		};
+	};
+
+	var printConstraintTypeAndRating = function (GestureDataArray)
+	{
+		$("p").append("constraint,rating<br>");
+
+		for (var i = 0; i < GestureDataArray.length; i++) 
+		{
+			var gesture = GestureDataArray[i];
+			var constraint = gesture.ConstraintType;
+			var line = constraint + "," + gesture.rating + "<br>";
+			$("p").append(line);
+		};
+	};
+
+	var printGlassTypeAndRating = function (GestureDataArray)
+	{
+		$("p").append("glassType,rating<br>");
+
+		for (var i = 0; i < GestureDataArray.length; i++) 
+		{
+			var gesture = GestureDataArray[i];
+			var glassType = gesture.GlassType;
+			var line = glassType + "," + gesture.rating + "<br>";
+			$("p").append(line);
+		};
+	};
+
 
 
 
