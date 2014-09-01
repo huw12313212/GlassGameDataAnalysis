@@ -200,19 +200,19 @@
 			   				"On-Body":[],
 		   					"Phone":[],
 		   					"In-Air":[],
-		   					"All":[],
 	   					},
 	   					"Epson":{
 	   						"On-Body":[],
 		   					"Phone":[],
 		   					"In-Air":[],
-		   					"All":[],
 	   					}
 		   			};
 		   		}
 
 		   		PreferData[GestureData.ConstraintType].push(GestureData);
 		   		PreferData["All"].push(GestureData);
+
+		   		PreferData.Intent[GestureData.intent][GestureData.GlassType][GestureData.ConstraintType].push(GestureData);
    			}
 	   }
 
@@ -408,14 +408,17 @@
 			Result.DivideByName = DivideByName;
 
 
-			//console.log(Result);
+			console.log(Result);
 			//console.log(data);
 
-			printDifferentMethod(SameOrNot.DifferentWithGroup);
+			//此部分拿來畫圖
+			//printDifferentMethod(SameOrNot.DifferentWithGroup); //不同眼鏡造成操作不同？
 			//printIntentAndPreferedRating(IntentRating); // 全部 Rating 分佈
 			//printIntentAndPreferedConstraint(PreferData); // 全部 Prefer 分佈
-			//printConstraintTypeAndRating(GestureDataArray); //Constraint 與 User Ratin
-			//printGlassTypeAndRating(GestureDataArray); //GlassType與UserRating的關係
+
+			//以下要跑統計
+			//printConstraintTypeAndRating(GestureDataArray); //Constraint 與 User Rating
+			printGlassTypeAndRating(GestureDataArray); //GlassType與UserRating的關係
 
 
 			//printIntentTypeAndRating(GestureDataArray);
