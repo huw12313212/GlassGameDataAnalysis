@@ -411,7 +411,7 @@ public void back(){
 }
 
 void readTags(){
-	if(buffer.size() > movieIndex && movieIndex >= 0){
+	if(movieIndex >= 0){
 		String data = "";
 		// for(int i = 0;i < buffer.size();i++){
 		// 	String test = new String(buffer.get(i));
@@ -429,6 +429,7 @@ void readTags(){
 		String token[] = split(data, ", ");
 		for(int i = 1; i < token.length; i++){
 			for(int j = 0;j < tagSet.size(); j++){
+				println("token: " + token[i] + ", tagSet: " + tagSet.get(j));
 				if(token[i].equals(tagSet.get(j))){
 					checkBox.activate(j);
 				}
