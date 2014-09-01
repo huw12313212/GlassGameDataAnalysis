@@ -55,14 +55,58 @@
     "In-Air": []
   },
   "01": {
-    "On-Body": [],
-    "Phone": [],
-    "In-Air": ["測試"]
+    "On-Body": [
+      "手掌TrackPad",
+      "Hand Mapping",
+      "點眼鏡",
+      "戒指TrackPad",
+      "大腿TrackPad",
+      "手背trackPad",
+      "手背Mapping",
+      "點自己臉",
+      "手腕Mapping",
+      "滑眼鏡"
+    ],
+    "Phone": [
+      "手機Track Pad",
+      "手機Mapping"
+    ],
+    "In-Air": [
+      "Direct Touch",
+      "Eye Gesture",
+      "Direct Grab",
+      "In Air Cursor",
+      "腦波",
+      "聲控",
+      "Head Gesture"
+    ]
   },
   "02": {
-    "On-Body": [],
-    "Phone": [],
-    "In-Air": []
+    "On-Body": [
+      "戒指",
+      "滑手指",
+      "hand track pad",
+      "點臉",
+      "滑手錶",
+      "滑手臂",
+      "手背 track pad",
+      "Hand Mapping",
+      "滑Glass"
+    ],
+    "Phone": [
+      "手機TrackPad",
+      "手機Mapping"
+    ],
+    "In-Air": [
+      "Direct Touch",
+      "In-Air Cursor",
+      "DirectDrag",
+      "EyeGesture",
+      "In-Air TrackPad",
+      "Head-Gesture",
+      "Hand Gesture",
+      "Voice Control"
+    ]
   },
   "11": {
     "On-Body": [],
