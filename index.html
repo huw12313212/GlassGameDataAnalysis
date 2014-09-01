@@ -417,8 +417,8 @@
 			//printIntentAndPreferedConstraint(PreferData); // 全部 Prefer 分佈
 
 			//以下要跑統計
-			//printConstraintTypeAndRating(GestureDataArray); //Constraint 與 User Rating
-			printGlassTypeAndRating(GestureDataArray); //GlassType與UserRating的關係
+			printConstraintTypeAndRating(GestureDataArray); //Constraint 與 User Rating
+			//printGlassTypeAndRating(GestureDataArray); //GlassType與UserRating的關係
 
 
 			//printIntentTypeAndRating(GestureDataArray);
@@ -444,13 +444,13 @@
 
 	var printConstraintTypeAndRating = function (GestureDataArray)
 	{
-		$("p").append("constraint,rating<br>");
+		$("p").append("interaction,constraint,rating<br>");
 
 		for (var i = 0; i < GestureDataArray.length; i++) 
 		{
 			var gesture = GestureDataArray[i];
 			var constraint = gesture.ConstraintType;
-			var line = constraint + "," + gesture.rating + "<br>";
+			var line = gesture.intent+","+constraint + "," + gesture.rating + "<br>";
 			$("p").append(line);
 		};
 	};
