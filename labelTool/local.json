@@ -1,13 +1,28 @@
 {
   "08": {
-    "On-Body": [],
-    "Phone": [],
-    "In-Air": []
+    "On-Body": [
+      "HandMappingDraw",
+      "手臂Drawing",
+      "手背Drawing",
+      "大腿Drawing"
+    ],
+    "Phone": ["手機MappingDraw"],
+    "In-Air": [
+      "DirectDraw",
+      "In-Air-Cursor",
+      "EyeControl"
+    ]
   },
   "09": {
     "On-Body": [],
     "Phone": [],
-    "In-Air": []
+    "In-Air": [
+      "DirectDrag",
+      "DragSomeWhere",
+      "Gesture",
+      "揮手",
+      "HeadGesture"
+    ]
   },
   "17": {
     "On-Body": [],
