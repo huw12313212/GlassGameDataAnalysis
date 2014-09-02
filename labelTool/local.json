@@ -51,7 +51,10 @@
       "大腿TrackPad",
       "手臂TrackPad"
     ],
-    "Phone": [],
+    "Phone": [
+      "手機TrackPad",
+      "手機按鈕"
+    ],
     "In-Air": [
       "DirectDrag",
       "In-Air Cursor",
@@ -120,11 +123,6 @@
       "In Air TrackPad"
     ]
   },
-  "11": {
-    "On-Body": [],
-    "Phone": [],
-    "In-Air": []
-  },
   "02": {
     "On-Body": [
       "戒指",
@@ -152,7 +150,7 @@
       "Voice Control"
     ]
   },
-  "12": {
+  "11": {
     "On-Body": [],
     "Phone": [],
     "In-Air": []
@@ -184,6 +182,11 @@
       "比手勢",
       "Head Gesture"
     ]
+  },
+  "12": {
+    "On-Body": [],
+    "Phone": [],
+    "In-Air": []
   },
   "10": {
     "On-Body": [],
