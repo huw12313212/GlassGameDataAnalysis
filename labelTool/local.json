@@ -101,7 +101,15 @@
   "15": {
     "On-Body": [],
     "Phone": [],
-    "In-Air": []
+    "In-Air": [
+      "食指空中點一下",
+      "出拳",
+      "揮動指頭",
+      "聲控",
+      "揮手",
+      "點頭",
+      "握拳"
+    ]
   },
   "06": {
     "On-Body": [
@@ -190,9 +198,35 @@
     ]
   },
   "14": {
-    "On-Body": [],
-    "Phone": [],
-    "In-Air": []
+    "On-Body": [
+      "大拇指搖桿",
+      "滑手掌",
+      "手掌按鈕",
+      "右手握住左手大拇指",
+      "雙指在手掌上走",
+      "手錶按鈕",
+      "戒指",
+      "滑手背",
+      "滑大腿",
+      "滑手錶",
+      "右手凹左手"
+    ],
+    "Phone": [
+      "傾斜手機",
+      "滑手機",
+      "手機按鈕"
+    ],
+    "In-Air": [
+      "虛擬搖桿",
+      "滑畫面",
+      "Pointing",
+      "手在空中走",
+      "上下左右揮",
+      "大腿JoyStick",
+      "頭上下左右",
+      "眼睛操作",
+      "手掌傾斜"
+    ]
   },
   "01": {
     "On-Body": [
@@ -220,6 +254,33 @@
       "聲控",
       "Head Gesture",
       "In Air TrackPad"
+    ]
+  },
+  "02": {
+    "On-Body": [
+      "戒指",
+      "滑手指",
+      "hand track pad",
+      "點臉",
+      "滑手錶",
+      "滑手臂",
+      "手背 track pad",
+      "Hand Mapping",
+      "滑Glass"
+    ],
+    "Phone": [
+      "手機TrackPad",
+      "手機Mapping"
+    ],
+    "In-Air": [
+      "Direct Touch",
+      "In-Air Cursor",
+      "DirectDrag",
+      "EyeGesture",
+      "In-Air TrackPad",
+      "Head-Gesture",
+      "Hand Gesture",
+      "Voice Control"
     ]
   },
   "11": {
@@ -250,31 +311,32 @@
       "轉頭"
     ]
   },
-  "02": {
+  "03": {
     "On-Body": [
-      "戒指",
+      "轉戒子",
       "滑手指",
-      "hand track pad",
-      "點臉",
-      "滑手錶",
-      "滑手臂",
-      "手背 track pad",
-      "Hand Mapping",
-      "滑Glass"
+      "hand_mapping",
+      "手背_Mapping",
+      "手臂TrackPad",
+      "HandTrackPad",
+      "大腿TrackPad",
+      "手臂Mapping",
+      "手錶TrackPad",
+      "滑眼鏡"
     ],
     "Phone": [
       "手機TrackPad",
-      "手機Mapping"
+      "手機Mapping",
+      "體感搖手機",
+      "手機四角落"
     ],
     "In-Air": [
-      "Direct Touch",
-      "In-Air Cursor",
-      "DirectDrag",
+      "DirectTouch",
+      "In-Air-TouchPad",
+      "IN-AIR-Cursor",
       "EyeGesture",
-      "In-Air TrackPad",
-      "Head-Gesture",
-      "Hand Gesture",
-      "Voice Control"
+      "比手勢",
+      "Head Gesture"
     ]
   },
   "12": {
@@ -304,34 +366,6 @@
       "手指旋轉",
       "轉拳頭",
       "轉頭"
-    ]
-  },
-  "03": {
-    "On-Body": [
-      "轉戒子",
-      "滑手指",
-      "hand_mapping",
-      "手背_Mapping",
-      "手臂TrackPad",
-      "HandTrackPad",
-      "大腿TrackPad",
-      "手臂Mapping",
-      "手錶TrackPad",
-      "滑眼鏡"
-    ],
-    "Phone": [
-      "手機TrackPad",
-      "手機Mapping",
-      "體感搖手機",
-      "手機四角落"
-    ],
-    "In-Air": [
-      "DirectTouch",
-      "In-Air-TouchPad",
-      "IN-AIR-Cursor",
-      "EyeGesture",
-      "比手勢",
-      "Head Gesture"
     ]
   },
   "10": {
