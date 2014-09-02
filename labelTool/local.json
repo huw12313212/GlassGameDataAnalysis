@@ -15,14 +15,52 @@
     "In-Air": []
   },
   "04": {
-    "On-Body": [],
-    "Phone": [],
-    "In-Air": []
+    "On-Body": [
+      "HandTrackPad",
+      "轉戒指",
+      "手背TrackPad",
+      "手臂TrackPad",
+      "戒指TrackPad",
+      "食指TrackPad",
+      "大腿按鈕",
+      "滑Glass"
+    ],
+    "Phone": [
+      "手機TrackPad",
+      "手機左右斜",
+      "手機左右按鈕"
+    ],
+    "In-Air": [
+      "DirectDrag",
+      "In-Air-Cursor",
+      "EyeGesture",
+      "Head-Gesture",
+      "Pointing",
+      "TrackPad",
+      "DIrectGrab"
+    ]
   },
   "05": {
-    "On-Body": [],
+    "On-Body": [
+      "Hand Mapping",
+      "hand TrackPad",
+      "大拇指搖桿",
+      "手背TrackPad",
+      "手掌按鈕",
+      "大拇指TrackPad",
+      "大腿TrackPad",
+      "手臂TrackPad"
+    ],
     "Phone": [],
-    "In-Air": []
+    "In-Air": [
+      "DirectDrag",
+      "In-Air Cursor",
+      "手持續揮動",
+      "In Air Buton",
+      "Eye Gesture",
+      "頭傾斜拳",
+      "Pointing"
+    ]
   },
   "15": {
     "On-Body": [],
@@ -78,8 +116,14 @@
       "In Air Cursor",
       "腦波",
       "聲控",
-      "Head Gesture"
+      "Head Gesture",
+      "In Air TrackPad"
     ]
+  },
+  "11": {
+    "On-Body": [],
+    "Phone": [],
+    "In-Air": []
   },
   "02": {
     "On-Body": [
@@ -108,20 +152,38 @@
       "Voice Control"
     ]
   },
-  "11": {
+  "12": {
     "On-Body": [],
     "Phone": [],
     "In-Air": []
   },
   "03": {
-    "On-Body": [],
-    "Phone": [],
-    "In-Air": []
-  },
-  "12": {
-    "On-Body": [],
-    "Phone": [],
-    "In-Air": []
+    "On-Body": [
+      "轉戒子",
+      "滑手指",
+      "hand_mapping",
+      "手背_Mapping",
+      "手臂TrackPad",
+      "HandTrackPad",
+      "大腿TrackPad",
+      "手臂Mapping",
+      "手錶TrackPad",
+      "滑眼鏡"
+    ],
+    "Phone": [
+      "手機TrackPad",
+      "手機Mapping",
+      "體感搖手機",
+      "手機四角落"
+    ],
+    "In-Air": [
+      "DirectTouch",
+      "In-Air-TouchPad",
+      "IN-AIR-Cursor",
+      "EyeGesture",
+      "比手勢",
+      "Head Gesture"
+    ]
   },
   "10": {
     "On-Body": [],
