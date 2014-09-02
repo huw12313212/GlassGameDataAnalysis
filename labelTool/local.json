@@ -14,8 +14,25 @@
     ]
   },
   "09": {
-    "On-Body": [],
-    "Phone": [],
+    "On-Body": [
+      "DragOnHand",
+      "畫自己的臉",
+      "把戒子拔出去",
+      "談手指",
+      "推大拇指",
+      "用項鍊",
+      "滑手背",
+      "滑手機",
+      "滑眼鏡",
+      "滑大腿",
+      "滑手錶",
+      "拉弓"
+    ],
+    "Phone": [
+      "手機搖桿",
+      "手機Drag",
+      "甩手機"
+    ],
     "In-Air": [
       "DirectDrag",
       "DragSomeWhere",
@@ -179,6 +196,27 @@
       "In Air TrackPad"
     ]
   },
+  "11": {
+    "On-Body": [
+      "轉戒指",
+      "滑戒指（左右）",
+      "拇指在食指上滑",
+      "轉手錶",
+      "在手掌畫圈",
+      "手背畫圈",
+      "大腿畫弧",
+      "包復全頭轉"
+    ],
+    "Phone": [],
+    "In-Air": [
+      "RotateProxy",
+      "手指劃弧",
+      "DirectGrab",
+      "雙指Rotate",
+      "轉拳頭",
+      "轉頭"
+    ]
+  },
   "02": {
     "On-Body": [
       "戒指",
@@ -206,7 +244,7 @@
       "Voice Control"
     ]
   },
-  "11": {
+  "12": {
     "On-Body": [],
     "Phone": [],
     "In-Air": []
@@ -239,14 +277,24 @@
       "Head Gesture"
     ]
   },
-  "12": {
-    "On-Body": [],
-    "Phone": [],
-    "In-Air": []
-  },
   "10": {
-    "On-Body": [],
-    "Phone": [],
-    "In-Air": []
+    "On-Body": [
+      "DirectMapping",
+      "手掌Mapping",
+      "手指頭Mapping",
+      "拍腿",
+      "手背Mapping",
+      "手臂Mapping"
+    ],
+    "Phone": ["手機Mapping"],
+    "In-Air": [
+      "4FingerClick",
+      "DirectClick",
+      "In Air Cursor",
+      "三指",
+      "Eye Control",
+      "碰手指",
+      "Head Gesture"
+    ]
   }
 }
