@@ -298,6 +298,7 @@ public void next(){
 		loadTag(val[1], val[7].substring(0, 2));
 		readTags();
 		tagChange = 0;
+		controlP5.get(Textfield.class, "numValue").setText("" + (movieIndex + 1));
 	}
 }
 
@@ -407,6 +408,7 @@ public void back(){
 		readTags();
 		tagChange = 0;
 		// movieIndex++;
+		controlP5.get(Textfield.class, "numValue").setText("" + (movieIndex + 1));
 	}
 }
 
@@ -532,9 +534,10 @@ public void add(){
 public void videoDisplay(String filePath){
 	if(movie != null){
 		movie.stop();
-		movie = null;
+		movie.dispose();
+		//movie = null;
 	}
-
+	
 	movie = new Movie(this, filePath);
 	movie.play();
 	isPlaying = true;
