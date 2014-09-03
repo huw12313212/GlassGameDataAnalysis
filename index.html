@@ -237,11 +237,17 @@
    						"On-Body":[],
 	   					"Phone":[],
 	   					"In-Air":[],
+   					},
+   					"All":{
+   						"On-Body":[],
+	   					"Phone":[],
+	   					"In-Air":[],
    					}
 	   			}
 	   		}
 
 	   		GroupData[data.intent][data.GlassType][data.ConstraintType].push(data);
+	   		GroupData[data.intent]["All"][data.ConstraintType].push(data);
 	   };
 
 	   var IntentRating = {};
@@ -396,7 +402,7 @@
   				}
   			};
 
-  			d3.csv("./result_huw_final2.csv", function(result_huw) 
+  			d3.csv("./result_huw_final3.csv", function(result_huw) 
   			{
   				//console.log(result_huw);
 
@@ -499,18 +505,9 @@
   			}
 
 
-  			 var groupAgreement = 
+  			var groupAgreement = 
   			{
-  				 "Google":{
-		   				"On-Body":{},
-	   					"Phone":{},
-	   					"In-Air":{},
-   					},
-   					"Epson":{
-   						"On-Body":{},
-	   					"Phone":{},
-	   					"In-Air":{},
-   					}
+  				 
   			};
 
 			for (var i = 0; i < GestureDataArray.length; i++) 
@@ -522,16 +519,109 @@
   					continue;
   				}
 
-  				if(groupAgreement[gesture.GlassType][gesture.ConstraintType][gesture.tag.group]==null)
-  					groupAgreement[gesture.GlassType][gesture.ConstraintType][gesture.tag.group]=[];
 
-  				groupAgreement[gesture.GlassType][gesture.ConstraintType][gesture.tag.group].push(gesture);
+	  			if (groupAgreement[gesture.intent]==null)
+	  			{
+	  				groupAgreement[gesture.intent] = 
+	  				{
+	  					"Google":{
+			   				"On-Body":{},
+		   					"Phone":{},
+		   					"In-Air":{},
+	   					},
+	   					"Epson":{
+	   						"On-Body":{},
+		   					"Phone":{},
+		   					"In-Air":{},
+	   					},
+	   					"All":{
+	   						"On-Body":{},
+		   					"Phone":{},
+		   					"In-Air":{},
+	   					}
+	   				}
+	   			}
+
+  				if(groupAgreement[gesture.intent][gesture.GlassType][gesture.ConstraintType][gesture.tag.group]==null)
+  					groupAgreement[gesture.intent][gesture.GlassType][gesture.ConstraintType][gesture.tag.group]=[];
+
+  				if(groupAgreement[gesture.intent]["All"][gesture.ConstraintType][gesture.tag.group]==null)
+  					groupAgreement[gesture.intent]["All"][gesture.ConstraintType][gesture.tag.group]=[];
+
+  				groupAgreement[gesture.intent][gesture.GlassType][gesture.ConstraintType][gesture.tag.group].push(gesture);
+  				groupAgreement[gesture.intent]["All"][gesture.ConstraintType][gesture.tag.group].push(gesture);
   			}
   			
+  			var groupAgreementValue = {};
+
+  			for(var intentKey in groupAgreement)
+  			{
+  				var intentData = groupAgreement[intentKey];
+
+  				if(groupAgreementValue[intentKey] == null)
+  				{
+  						groupAgreementValue[intentKey] = {
+	  					"Google":{
+			   				"On-Body":{},
+		   					"Phone":{},
+		   					"In-Air":{},
+	   					},
+	   					"Epson":{
+	   						"On-Body":{},
+		   					"Phone":{},
+		   					"In-Air":{},
+	   					},
+	   					"All":{
+	   						"On-Body":{},
+		   					"Phone":{},
+		   					"In-Air":{},
+	   					}
+	   				}
+  				}
+
+  				for(var glasskey in intentData)
+  				{
+  					var glassData = intentData[glasskey];
+
+  			
+  					for(var methodKey in glassData)
+  					{
+  						var methodData = glassData[methodKey];
+
+  						var groupSum = 0;
+
+						var mostGroupKey = null;
+
+  						for(var groupKey in methodData)
+  						{
+
+							if(mostGroupKey==null)mostGroupKey = groupKey;
+
+  							if(methodData[groupKey].length > methodData[mostGroupKey].length)mostGroupKey = groupKey;
+
+  							var group = methodData[groupKey];
+
+  							groupSum+= group.length;
+  						}
+
+  						var agreement = 0;
+
+  						for(var groupKey in methodData)
+  						{
+  							var group = methodData[groupKey];
+
+  							agreement += (group.length / groupSum) * (group.length / groupSum)
+  						}
+
+  						groupAgreementValue[intentKey][glasskey][methodKey][mostGroupKey] = agreement;
+  					}
+  				}
+  			}
 
 
   			var Result = {};
   			Result.groupAgreement = groupAgreement;
+  			Result.groupAgreementValue = groupAgreementValue;
 			Result.SameOrNot = SameOrNot;
 			Result.GestureDataArray = GestureDataArray;
 			Result.GroupData = GroupData;
@@ -623,16 +713,17 @@
 
 	var printIntentAndPreferedRating = function(IntentRating)
 	{
-		$("p").append("GlassType,Google Glass,,,,Epson BT-200,,<br>");
-		$("p").append("Intent,On-Body,In-Air,Phone,,On-Body,In-Air,Phone<br>");
+		$("p").append("GlassType,Google Glass,,,,Epson BT-200,,,,All,,,,<br>");
+		$("p").append("Intent,On-Body,In-Air,Phone,,On-Body,In-Air,Phone,,On-Body,In-Air,Phone<br>");
 		for(var key in IntentRating)
 		{
 			var data = IntentRating[key];
 
 			var googleData = data.Google;
 			var EpsonData = data.Epson;
+			var allData = data.All;
 
-			$("p").append(key+","+googleData["On-Body"]+","+googleData["In-Air"]+","+googleData["Phone"]+",,"+EpsonData["On-Body"]+","+EpsonData["In-Air"]+","+EpsonData["Phone"]+",<br>");
+			$("p").append(key+","+googleData["On-Body"]+","+googleData["In-Air"]+","+googleData["Phone"]+",,"+EpsonData["On-Body"]+","+EpsonData["In-Air"]+","+EpsonData["Phone"]+",,"+allData["On-Body"]+","+allData["In-Air"]+","+allData["Phone"]+",<br>");
 		}
 	}
 
