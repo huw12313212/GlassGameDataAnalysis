@@ -414,12 +414,12 @@
 
 			//此部分拿來畫圖
 			//printDifferentMethod(SameOrNot.DifferentWithGroup); //不同眼鏡造成操作不同？
-			printIntentAndPreferedRating(IntentRating); // 全部 Rating 分佈
+			//printIntentAndPreferedRating(IntentRating); // 全部 Rating 分佈
 			//printIntentAndPreferedConstraint(PreferData); // 全部 Prefer 分佈
 
 			//以下要跑統計
 			//printConstraintTypeAndRating(GestureDataArray); //Constraint 與 User Rating
-			//printGlassTypeAndRating(GestureDataArray); //GlassType與UserRating的關係
+			printGlassTypeAndRating(GestureDataArray); //GlassType與UserRating的關係
 
 
 			//printIntentTypeAndRating(GestureDataArray);
@@ -458,13 +458,14 @@
 
 	var printGlassTypeAndRating = function (GestureDataArray)
 	{
-		$("p").append("glassType,rating<br>");
+		$("p").append("glassType,constraint,rating<br>");
 
 		for (var i = 0; i < GestureDataArray.length; i++) 
 		{
 			var gesture = GestureDataArray[i];
 			var glassType = gesture.GlassType;
-			var line = glassType + "," + gesture.rating + "<br>";
+			var constraintType = gesture.ConstraintType;
+			var line = glassType +","+constraintType+ "," + gesture.rating + "<br>";
 			$("p").append(line);
 		};
 	};
