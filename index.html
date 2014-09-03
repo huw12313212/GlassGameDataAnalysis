@@ -396,8 +396,10 @@
   				}
   			};
 
-  			d3.csv("./result_huw_final.csv", function(result_huw) 
+  			d3.csv("./result_huw_final2.csv", function(result_huw) 
   			{
+  				//console.log(result_huw);
+
   				var tagTable = {};
   				
 
@@ -407,7 +409,7 @@
   					var currentTag = result_huw[i];
   					var resultTag = {};
 
-  					var uid = currentTag[1].trim();
+  					var uid = currentTag[1].toString().trim();
   					resultTag.uid = uid;
 
   					for(var j = 2;j< 15;j++)
@@ -435,23 +437,101 @@
   					}
  
   					tags[uid] = resultTag;
-
-
+  					//if(uid.indexOf("3D Move")>0)console.log(uid);
   				};
 
   				//console.log(tags);
 
-  			for (var i = 0; i < GestureDataArray.length; i++) {
+  			for (var i = 0; i < GestureDataArray.length; i++) 
+  			{
   				var gesture = GestureDataArray[i];
 
 				gesture.uid = gesture.GlassType+"_"+gesture.ConstraintType+"_"+gesture.intent+"_"+gesture.name;
-  				gesture.tag = tags[gesture.uid];
 
-  			
+				if(gesture.intent.indexOf("3D Move")>0)
+					gesture.uid = gesture.GlassType+"_"+gesture.ConstraintType+"_"+gesture.intent.trim()+" _"+gesture.name;
+
+
+
+  				gesture.tag = tags[gesture.uid.toString()];
   			};
+
+  			var spacePosition = 
+  			{
+  				 "Google":{
+		   				"On-Body":{},
+	   					"Phone":{},
+	   					"In-Air":{},
+   					},
+   					"Epson":{
+   						"On-Body":{},
+	   					"Phone":{},
+	   					"In-Air":{},
+   					}
+  			};
+
+  			for (var i = 0; i < GestureDataArray.length; i++) 
+  			{
+  				var gesture = GestureDataArray[i];
+
+  				if(gesture.tag == null || gesture.tag.position == null || gesture.tag.group == null)
+  				{
+  					console.log("weird tag:");
+  					console.log(gesture);
+  					continue;
+  				}
+
+  				if(gesture.tag.group.toString().indexOf("Eye")>=0||
+  					gesture.tag.group.toString().indexOf("Head")>=0||
+  					gesture.tag.group.toString().indexOf("眼")>=0||
+  					gesture.tag.group.toString().indexOf("聲")>=0||
+  					gesture.tag.group.toString().indexOf("點頭")>=0||
+  					gesture.tag.group.toString().indexOf("腦")>=0){
+  					//console.log("");
+  					//console.log(gesture.tag);
+  					continue;
+  				}
+
+  				if(spacePosition[gesture.GlassType][gesture.ConstraintType][gesture.tag.position]==null)
+  					spacePosition[gesture.GlassType][gesture.ConstraintType][gesture.tag.position]=[];
+
+  				spacePosition[gesture.GlassType][gesture.ConstraintType][gesture.tag.position].push(gesture);
+  			}
+
+
+  			 var groupAgreement = 
+  			{
+  				 "Google":{
+		   				"On-Body":{},
+	   					"Phone":{},
+	   					"In-Air":{},
+   					},
+   					"Epson":{
+   						"On-Body":{},
+	   					"Phone":{},
+	   					"In-Air":{},
+   					}
+  			};
+
+			for (var i = 0; i < GestureDataArray.length; i++) 
+  			{
+  				var gesture = GestureDataArray[i];
+
+  				if(gesture.tag == null || gesture.tag.position == null || gesture.tag.group == null)
+  				{
+  					continue;
+  				}
+
+  				if(groupAgreement[gesture.GlassType][gesture.ConstraintType][gesture.tag.group]==null)
+  					groupAgreement[gesture.GlassType][gesture.ConstraintType][gesture.tag.group]=[];
+
+  				groupAgreement[gesture.GlassType][gesture.ConstraintType][gesture.tag.group].push(gesture);
+  			}
+  			
 
 
   			var Result = {};
+  			Result.groupAgreement = groupAgreement;
 			Result.SameOrNot = SameOrNot;
 			Result.GestureDataArray = GestureDataArray;
 			Result.GroupData = GroupData;
@@ -459,6 +539,7 @@
 			Result.PreferData = PreferData;
 			Result.IntentRating = IntentRating;
 			Result.DivideByName = DivideByName;
+			Result.spacePosition = spacePosition;
 			Result.tags = tags;
 
 
