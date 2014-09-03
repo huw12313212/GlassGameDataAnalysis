@@ -396,10 +396,62 @@
   				}
   			};
 
-  	
-  	
+  			d3.csv("./result_huw_final.csv", function(result_huw) 
+  			{
+  				var tagTable = {};
+  				
 
-	   		var Result = {};
+  				var tags = {};
+
+  				for (var i = 0; i < result_huw.length; i++) {
+  					var currentTag = result_huw[i];
+  					var resultTag = {};
+
+  					var uid = currentTag[1].trim();
+  					resultTag.uid = uid;
+
+  					for(var j = 2;j< 15;j++)
+  					{
+  						var slot = currentTag[j];
+  						if(slot == null)continue;
+  						slot = slot.trim();
+
+  						var startNum = slot.substring(0,1);
+  						if(startNum=="5")
+  						{
+  							resultTag.position = slot;
+  						}
+
+  						if(startNum=="6")
+  						{
+  							resultTag.position = slot;
+  							resultTag.group = slot;
+  						}
+
+  						if(startNum!="0"&&startNum!="1"&&startNum!="2"&&startNum!="3"&&startNum!="4"&&startNum!="5"&&startNum!="6"&&startNum!="")
+  						{
+  							resultTag.group = slot;
+  						}
+  					}
+ 
+  					tags[uid] = resultTag;
+
+
+  				};
+
+  				//console.log(tags);
+
+  			for (var i = 0; i < GestureDataArray.length; i++) {
+  				var gesture = GestureDataArray[i];
+
+				gesture.uid = gesture.GlassType+"_"+gesture.ConstraintType+"_"+gesture.intent+"_"+gesture.name;
+  				gesture.tag = tags[gesture.uid];
+
+  			
+  			};
+
+
+  			var Result = {};
 			Result.SameOrNot = SameOrNot;
 			Result.GestureDataArray = GestureDataArray;
 			Result.GroupData = GroupData;
@@ -407,6 +459,7 @@
 			Result.PreferData = PreferData;
 			Result.IntentRating = IntentRating;
 			Result.DivideByName = DivideByName;
+			Result.tags = tags;
 
 
 			console.log(Result);
@@ -419,13 +472,14 @@
 
 			//以下要跑統計
 			//printConstraintTypeAndRating(GestureDataArray); //Constraint 與 User Rating
-			printGlassTypeAndRating(GestureDataArray); //GlassType與UserRating的關係
+			//printGlassTypeAndRating(GestureDataArray); //GlassType與UserRating的關係
 
 
 			//printIntentTypeAndRating(GestureDataArray);
 
 			//$("p").text( JSON.stringify(GestureDataArray) );
 
+  			});
 	   });
 	});
 
