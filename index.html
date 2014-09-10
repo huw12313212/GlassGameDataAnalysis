@@ -696,6 +696,21 @@
 					result[attrKey][attrData] += singleGroupData.length;
 				}
 			}
+		}
+
+		for(var attrKey in result)
+		{
+			attrData = result[attrKey];
+			var sum = 0;
+			for(var name in attrData)
+			{
+				sum += attrData[name];
+			}
+
+			for(var name in attrData)
+			{
+				attrData[name]  /= sum;
+			}
 
 		}
 
