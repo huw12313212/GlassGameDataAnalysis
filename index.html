@@ -620,8 +620,10 @@
 
   			var InAirTaxonomyResult = AnalysisTaxonomy(groupAgreement,"All","In-Air",InAirTaxonomyAttribute);
 
+  			var OnBodyTaxonomyResult = AnalysisTaxonomy(groupAgreement,"All","On-Body",OnBodyTaxonomyAttribute);
 
   			var Result = {};
+  			Result.OnBodyTaxonomyResult = OnBodyTaxonomyResult;
   			Result.InAirTaxonomyResult = InAirTaxonomyResult;
   			Result.groupAgreement = groupAgreement;
   			Result.groupAgreementValue = groupAgreementValue;
@@ -828,6 +830,13 @@
 				"binding" : "independent",
 				"flow" : "continuous",
 			},
+			"滑手指":
+			{
+				"form" : "手指",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
 			"點臉":
 			{
 				"form" : "臉",
@@ -875,6 +884,13 @@
 				"binding" : "surface-mapping",
 				"flow" : "discrete",
 			},
+			"手臂TrackPad":
+			{
+				"form" : "手臂",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
 			"手錶TrackPad":
 			{
 				"form" : "手錶",
@@ -896,7 +912,7 @@
 				"binding" : "independent",
 				"flow" : "continuous",
 			},
-			"轉戒指":
+			"轉戒子":
 			{
 				"form" : "戒指",
 				"nature" : "metaphorical",
@@ -1175,7 +1191,7 @@
 			},
 		},
 		"09表達2D發射向量" : 
-		{
+		{ 
 			"DragOnHand":
 			{
 				"form" : "手掌",
@@ -1183,7 +1199,7 @@
 				"binding" : "independent",
 				"flow" : "continuous",
 			},
-			"把戒指拔出去":
+			"把戒子拔出去":
 			{
 				"form" : "戒指",
 				"nature" : "metaphorical",
@@ -1330,7 +1346,7 @@
 				"binding" : "independent",
 				"flow" : "continuous",
 			},
-			"滑戒指(左右)":
+			"滑戒指（左右）":
 			{
 				"form" : "戒指",
 				"nature" : "abstract",
@@ -1433,6 +1449,13 @@
 				"nature" : "abstract",
 				"binding" : "independent",
 				"flow" : "continuous",
+			},
+			"大拇指點食指":
+			{
+				"form" : "手指",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
 			},
 			"大拇指點戒指":
 			{
@@ -1587,7 +1610,222 @@
 				"binding" : "independent",
 				"flow" : "discrete",
 			},
-			
+			"拇指點食指":
+			{
+				"form" : "手指",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"拍掌":
+			{
+				"form" : "手掌",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"按眼鏡":
+			{
+				"form" : "眼鏡",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"按項鍊":
+			{
+				"form" : "項鍊",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"敲大腿":
+			{
+				"form" : "大腿",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"甩手錶":
+			{
+				"form" : "手錶",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"點戒指":
+			{
+				"form" : "戒指",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"點手掌":
+			{
+				"form" : "手掌",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+		},
+		"16Avator Duck" : 
+		{
+			"右手手指在左手手掌往下滑":
+			{
+				"form" : "手掌",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"右手敲左手手掌":
+			{
+				"form" : "手掌",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"大拇指點食指":
+			{
+				"form" : "手指",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"戒指往下滑":
+			{
+				"form" : "戒指",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"手錶往下滑":
+			{
+				"form" : "手錶",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"按項鍊":
+			{
+				"form" : "項鍊",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"轉手錶":
+			{
+				"form" : "手錶",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"點大腿":
+			{
+				"form" : "大腿",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"點戒指":
+			{
+				"form" : "戒指",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+		},
+		"17Control 3D Viewport" : 
+		{
+			"一隻手代表攝影機 一隻手代表人":
+			{
+				"form" : "手掌",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"大拇指滑戒指":
+			{
+				"form" : "戒指",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"手平面代表地板":
+			{
+				"form" : "手掌",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"手平面代表攝影機":
+			{
+				"form" : "手掌",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"拳頭在手掌上滾動":
+			{
+				"form" : "手掌",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"掌握全頭":
+			{
+				"form" : "手掌",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"滑大腿":
+			{
+				"form" : "大腿",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"滑手掌":
+			{
+				"form" : "手掌",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"滑手背":
+			{
+				"form" : "手背",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"滑手錶":
+			{
+				"form" : "手錶",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"滑眼鏡":
+			{
+				"form" : "眼鏡",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"轉戒指":
+			{
+				"form" : "戒指",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"轉手錶":
+			{
+				"form" : "手錶",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
 		},
 	}
 	
