@@ -402,7 +402,7 @@
   				}
   			};
 
-  			d3.csv("./result_huw_final3.csv", function(result_huw) 
+  			d3.csv("./result_huw_final5.csv", function(result_huw) 
   			{
   				//console.log(result_huw);
 
@@ -618,8 +618,11 @@
   				}
   			}
 
+  			var InAirTaxonomyResult = AnalysisTaxonomy(groupAgreement,"All","In-Air",InAirTaxonomyAttribute);
+
 
   			var Result = {};
+  			Result.InAirTaxonomyResult = InAirTaxonomyResult;
   			Result.groupAgreement = groupAgreement;
   			Result.groupAgreementValue = groupAgreementValue;
 			Result.SameOrNot = SameOrNot;
@@ -653,6 +656,1007 @@
   			});
 	   });
 	});
+
+	
+
+	var AnalysisTaxonomy= function(groupAgreement,GlassType,MethodType,Attribute)
+	{
+		var result = {};
+
+		for(var taskkey in groupAgreement)
+		{
+			taskData = groupAgreement[taskkey];
+			glassData = taskData[GlassType];
+			methodData = glassData[MethodType];
+
+			for(var groupKey in methodData)
+			{
+				//console.log("taskKey:"+taskkey+" groupKey:"+groupKey);
+				//if(Attribute[taskkey]==null)console.log("task not found:"+taskkey);
+				//if(Attribute[taskkey][groupKey]==null)console.log("groupe not found:"+groupKey);
+
+				var attr = Attribute[taskkey][groupKey];
+				var singleGroupData = methodData[groupKey];
+				if(attr == null)
+				{
+					console.log(taskkey + ":" + GlassType + ":" + MethodType + ":" + groupKey + " not Found");
+					continue;
+				}
+
+				for(var attrKey in attr)
+				{
+					attrData = attr[attrKey];
+
+					if(result[attrKey]==null)result[attrKey] = {};
+
+					if(result[attrKey][attrData]==null)result[attrKey][attrData] = 0;
+
+					result[attrKey][attrData] += singleGroupData.length;
+				}
+			}
+
+		}
+
+		return result;
+
+	}
+
+	var InAirTaxonomyAttribute = 
+	{
+		"01單選物件" : 
+		{
+			"Direct Grab":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "physical",
+				"binding" : "direct-mapping",
+				"flow" : "discrete",
+			},
+			"Direct Touch":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "physical",
+				"binding" : "direct-mapping",
+				"flow" : "discrete",
+			},
+			"Eye Gesture":
+			{
+				"selected" : false,
+				"form" : "eye",
+				"nature" : "metaphorical",
+				"binding" : "direct-mapping",
+				"flow" : "continuous",
+			},
+			"Head Gesture":
+			{
+				"selected" : false,
+				"form" : "head",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"In Air Cursor":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "metaphorical",
+				"binding" : "surface-mapping",
+				"flow" : "continuous",
+			},
+			"In Air TrackPad":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"聲控":
+			{
+				"selected" : false,
+				"form" : "voice",
+				"nature" : "symbolic",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+		},
+		"02選單選項(直)" : 
+		{
+			"Direct Touch":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "physical",
+				"binding" : "direct-mapping",
+				"flow" : "discrete",
+			},			
+			"DirectDrag":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "physical",
+				"binding" : "direct-mapping",
+				"flow" : "continuous",
+			},
+			"EyeGesture":
+			{
+				"selected" : false,
+				"form" : "eye",
+				"nature" : "metaphorical",
+				"binding" : "direct-mapping",
+				"flow" : "continuous",
+			},
+			"Hand Gesture":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "symbolic",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"Head-Gesture":
+			{
+				"selected" : false,
+				"form" : "head",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"In-Air Cursor":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "metaphorical",
+				"binding" : "surface-mapping",
+				"flow" : "continuous",
+			},
+			"In-Air TrackPad":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"Voice Control":
+			{
+				"selected" : false,
+				"form" : "voice",
+				"nature" : "symbolic",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+		},
+		"03選單選項(橫)" : 
+		{
+			"DirectTouch":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "physical",
+				"binding" : "direct-mapping",
+				"flow" : "discrete",
+			},	
+			"EyeGesture":
+			{
+				"selected" : false,
+				"form" : "eye",
+				"nature" : "metaphorical",
+				"binding" : "direct-mapping",
+				"flow" : "continuous",
+			},	
+			"Head Gesture":
+			{
+				"selected" : false,
+				"form" : "head",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},	
+			"IN-AIR-Cursor":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "metaphorical",
+				"binding" : "surface-mapping",
+				"flow" : "continuous",
+			},			
+			"In-Air-TouchPad":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"比手勢":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "symbolic",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},			
+		},
+		"04左右移動" : 
+		{
+			"DIrectGrab":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "physical",
+				"binding" : "direct-mapping",
+				"flow" : "continuous",
+			},	
+			"DirectDrag":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "physical",
+				"binding" : "direct-mapping",
+				"flow" : "continuous",
+			},
+			"EyeGesture":
+			{
+				"selected" : false,
+				"form" : "eye",
+				"nature" : "metaphorical",
+				"binding" : "direct-mapping",
+				"flow" : "continuous",
+			},	
+			"Head-Gesture":
+			{
+				"selected" : false,
+				"form" : "head",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"In-Air-Cursor":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "metaphorical",
+				"binding" : "surface-mapping",
+				"flow" : "continuous",
+			},
+			"Pointing":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "symbolic",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"TrackPad":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+		},
+		"05上下左右移動" : 
+		{
+			"DirectDrag":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "physical",
+				"binding" : "direct-mapping",
+				"flow" : "continuous",
+			},	
+			"Eye Gesture":
+			{
+				"selected" : false,
+				"form" : "eye",
+				"nature" : "metaphorical",
+				"binding" : "direct-mapping",
+				"flow" : "continuous",
+			},
+			"In Air Buton":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},	
+			"In-Air Cursor":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "metaphorical",
+				"binding" : "surface-mapping",
+				"flow" : "continuous",
+			},	
+			"Pointing":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "symbolic",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},	
+			"手持續揮動":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},	
+			"頭傾斜拳":
+			{
+				"selected" : false,
+				"form" : "head",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},	
+		},
+		"06交換物件位置" : 
+		{
+			"DirectClick":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "physical",
+				"binding" : "direct-mapping",
+				"flow" : "discrete",
+			},
+			"DirectDrag":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "physical",
+				"binding" : "direct-mapping",
+				"flow" : "continuous",
+			},
+			"FingerRotate":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "physical",
+				"binding" : "direct-mapping",
+				"flow" : "continuous",
+			},
+			"In-AIR CURSOR CLick":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "metaphorical",
+				"binding" : "surface-mapping",
+				"flow" : "continuous",
+			},
+			"In-Air Curosr Drag":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "metaphorical",
+				"binding" : "surface-mapping",
+				"flow" : "continuous",
+			},
+			"In-Air Curosr&Gesture":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "metaphorical",
+				"binding" : "surface-mapping",
+				"flow" : "continuous",
+			},
+			"TrackPad&Gesture":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+		},
+		"07移至特定位置" : 
+		{
+			"DirectDrag":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "physical",
+				"binding" : "direct-mapping",
+				"flow" : "continuous",
+			},
+			"Eye Gesture":
+			{
+				"selected" : false,
+				"form" : "eye",
+				"nature" : "metaphorical",
+				"binding" : "direct-mapping",
+				"flow" : "continuous",
+			},
+			"In-Air-Cursor":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "metaphorical",
+				"binding" : "surface-mapping",
+				"flow" : "continuous",
+			},
+			"TrackPadd":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+		},
+		"08表達一條Path" : 
+		{
+			"DirectDraw":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "physical",
+				"binding" : "direct-mapping",
+				"flow" : "continuous",
+			},
+			"EyeControl":
+			{
+				"selected" : false,
+				"form" : "eye",
+				"nature" : "metaphorical",
+				"binding" : "direct-mapping",
+				"flow" : "continuous",
+			},
+			"In-Air-Cursor":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "metaphorical",
+				"binding" : "surface-mapping",
+				"flow" : "continuous",
+			},
+		},
+		"09表達2D發射向量" : 
+		{
+			"DirectDrag":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "physical",
+				"binding" : "direct-mapping",
+				"flow" : "continuous",
+			},
+			"DragSomeWhere":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"Gesture":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "symbolic",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"HeadGesture":
+			{
+				"selected" : false,
+				"form" : "head",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"揮手":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+		},
+		"10配合節奏打不同音調" : 
+		{
+			"DirectClick":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "physical",
+				"binding" : "direct-mapping",
+				"flow" : "discrete",
+			},
+			"Eye Control":
+			{
+				"selected" : false,
+				"form" : "eye",
+				"nature" : "metaphorical",
+				"binding" : "direct-mapping",
+				"flow" : "discrete",
+			},
+			"Head Gesture":
+			{
+				"selected" : false,
+				"form" : "head",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"In Air Cursor":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "metaphorical",
+				"binding" : "surface-mapping",
+				"flow" : "discrete",
+			},
+			"三指":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"碰手指":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+		},
+		"11Z軸Rotate" : 
+		{
+			"DirectGrab":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "physical",
+				"binding" : "direct-mapping",
+				"flow" : "continuous",
+			},
+			"RotateProxy":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"手指劃弧":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"轉拳頭":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"轉頭":
+			{
+				"selected" : false,
+				"form" : "head",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"雙指Rotate":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "physical",
+				"binding" : "direct-mapping",
+				"flow" : "continuous",
+			},
+		},
+		"12Y軸Rotate" : 
+		{
+			"DirectGrab":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "physical",
+				"binding" : "direct-mapping",
+				"flow" : "continuous",
+			},
+			"ProxyRotate":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"戳手":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"手指旋轉":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"空中左右滑":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"轉拳頭":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"轉頭":
+			{
+				"selected" : false,
+				"form" : "head",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+		},
+		"13Avator Jump" : 
+		{
+			"上滑Gesture":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"大拇指":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"抬手指":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"揮手":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"揮手指":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"特定手勢":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "symbolic",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"雙指點擊":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"點頭":
+			{
+				"selected" : false,
+				"form" : "head",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			
+		},
+		"14Avator 3D Move " : 
+		{
+			"Pointing":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "symbolic",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"上下左右揮":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"大腿JoyStick":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"手在空中走":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"手掌傾斜":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"滑畫面":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "metaphorical",
+				"binding" : "direct-mapping",
+				"flow" : "continuous",
+			},
+			"眼睛操作":
+			{
+				"selected" : false,
+				"form" : "eye",
+				"nature" : "abstract",
+				"binding" : "direct-mapping",
+				"flow" : "discrete",
+			},
+			"虛擬搖桿":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"頭上下左右":
+			{
+				"selected" : false,
+				"form" : "head",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			
+		},
+		"15Avator Attack" : 
+		{
+			"出拳":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "symbolic",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"握拳":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"揮動指頭":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"揮手":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"聲控":
+			{
+				"selected" : false,
+				"form" : "voice",
+				"nature" : "symbolic",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"食指空中點一下":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"點頭":
+			{
+				"selected" : false,
+				"form" : "head",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			
+		},
+		"16Avator Duck" : 
+		{
+			"彎手指":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"手指往下揮":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"手掌往下滑":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"握拳":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"聲控":
+			{
+				"selected" : false,
+				"form" : "voice",
+				"nature" : "symbolic",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"舉手":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+			"點頭":
+			{
+				"selected" : false,
+				"form" : "head",
+				"nature" : "abstract",
+				"binding" : "independent",
+				"flow" : "discrete",
+			},
+		},
+		"17Control 3D Viewport" : 
+		{
+			"Eye-Gesture":
+			{
+				"selected" : false,
+				"form" : "eye",
+				"nature" : "metaphorical",
+				"binding" : "direct-mapping",
+				"flow" : "continuous",
+			},
+			"In-Air-Grab":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"point代表Camera方向":
+			{
+				"selected" : false,
+				"form" : "finger",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"守在空中畫圈":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"手掌代表地面":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"揮手轉Camera":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"揮手轉人":
+			{
+				"selected" : false,
+				"form" : "hand",
+				"nature" : "metaphorical",
+				"binding" : "independent",
+				"flow" : "continuous",
+			},
+			"轉頭":
+			{
+				"selected" : false,
+				"form" : "head",
+				"nature" : "physical",
+				"binding" : "direct-mapping",
+				"flow" : "continuous",
+			},
+
+		},
+
+	}
+
 
 	var printIntentTypeAndRating = function (GestureDataArray)
 	{
