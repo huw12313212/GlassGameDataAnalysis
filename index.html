@@ -622,7 +622,40 @@
 
   			var OnBodyTaxonomyResult = AnalysisTaxonomy(groupAgreement,"All","On-Body",OnBodyTaxonomyAttribute);
 
+
+  			var NamePositionData = {};
+  			for(var glasskey in spacePosition)
+  			{
+  				var glassData = spacePosition[glasskey];
+
+  				var inAirData = glassData["In-Air"];
+
+  				for(var positionKey in inAirData)
+  				{
+  					var positionData = inAirData[positionKey];
+
+  					for(var i = 0; i<positionData.length;i++)
+  					{
+  						var singleEntry = positionData[i];
+
+  						if(NamePositionData[singleEntry.name]==null)
+  						{
+  							NamePositionData[singleEntry.name] = {};
+  						}
+
+  						if(NamePositionData[singleEntry.name][positionKey]==null)
+  						{
+  							NamePositionData[singleEntry.name][positionKey]=[];
+  						}
+
+  						NamePositionData[singleEntry.name][positionKey].push(singleEntry);
+
+  					}
+  				}
+  			}
+
   			var Result = {};
+  			Result.NamePositionData = NamePositionData;
   			Result.OnBodyTaxonomyResult = OnBodyTaxonomyResult;
   			Result.InAirTaxonomyResult = InAirTaxonomyResult;
   			Result.groupAgreement = groupAgreement;
@@ -1292,35 +1325,35 @@
 			{
 				"form" : "手指",
 				"nature" : "abstract",
-				"binding" : "independent",
+				"binding" : "surface-mapping",
 				"flow" : "discrete",
 			},
 			"手掌Mapping":
 			{
 				"form" : "手掌",
 				"nature" : "abstract",
-				"binding" : "independent",
+				"binding" : "surface-mapping",
 				"flow" : "discrete",
 			},
 			"手背Mapping":
 			{
 				"form" : "手背",
 				"nature" : "abstract",
-				"binding" : "independent",
+				"binding" : "surface-mapping",
 				"flow" : "discrete",
 			},
 			"手臂Mapping":
 			{
 				"form" : "手臂",
 				"nature" : "abstract",
-				"binding" : "independent",
+				"binding" : "surface-mapping",
 				"flow" : "discrete",
 			},
 			"拍腿":
 			{
 				"form" : "大腿",
 				"nature" : "abstract",
-				"binding" : "independent",
+				"binding" : "surface-mapping",
 				"flow" : "discrete",
 			},
 		},
